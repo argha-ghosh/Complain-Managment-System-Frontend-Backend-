@@ -9,19 +9,20 @@ const ZoneOfficerHomeSchema = z.object({
     zoneName: z
         .string()
         .min(1, "Zone name is required")
-        .max(25, "Zone name cannot exceed 25 characters"),
+        .max(25, "Zone name cannot exceed 25 characters")
+        .regex(/^[a-zA-Z\s]+$/, "Zone name must contain only letters"),
+
     areaName: z
         .string()
         .min(1, "Area name is required")
-        .max(25, "Area name cannot exceed 25 characters"),
+        .max(25, "Area name cannot exceed 25 characters")
+        .regex(/^[a-zA-Z\s]+$/, "Area name must contain only letters"),
     description: z
         .string()
         .min(1, "Description is required")
         .max(100, "Description cannot exceed 100 characters"),
     status: z
-        .string()
-        .min(1, "Status is required")
-        .regex(/^(Pending|In Progress|Resolved)$/, {
+        .enum(["Pending", "In Progress", "Resolved"], {
             message: "Please select a valid status",
         }),
     zoneOfficerId: z
@@ -82,7 +83,6 @@ export default function ZoneOfficerHomeForm() {
                         id="zoneName"
                         value={zoneName}
                         onChange={(e) => setZoneName(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
@@ -93,7 +93,6 @@ export default function ZoneOfficerHomeForm() {
                         id="areaName"
                         value={areaName}
                         onChange={(e) => setAreaName(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
@@ -103,7 +102,6 @@ export default function ZoneOfficerHomeForm() {
                         id="description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 
@@ -113,7 +111,6 @@ export default function ZoneOfficerHomeForm() {
                         id="status"
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                         <option value="">Select Status</option>
                         <option value="Pending">Pending</option>
@@ -129,7 +126,6 @@ export default function ZoneOfficerHomeForm() {
                         id="zoneOfficerId"
                         value={zoneOfficerId}
                         onChange={(e) => setZoneOfficerId(Number(e.target.value))}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                 </div>
 

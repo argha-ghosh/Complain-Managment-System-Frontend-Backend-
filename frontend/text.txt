@@ -1,0 +1,3 @@
+Difference between React Js and Next Js
+What is Zod library, component, hook
+CSR or SSR
