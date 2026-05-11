@@ -19,8 +19,9 @@ export default function Header({ props }: { props?: any }) {
                 <h1>You are in {page} </h1>
                 <nav>
                     <Link href="/">Home</Link> |
-                    <Link href="/about">About</Link> |
-                    <Link href="/contact">Contact</Link>
+                    <Link href="/ZoneOfficer/Complaint/CreateComplain">Create Complain</Link> |
+                    <Link href="/ZoneOfficer/Complaint/DeleteComplain">Delete Complain</Link> |
+                    <Link href="/ZoneOfficer/SignUp">Sign Up</Link>
                 </nav>
             </header>
         </>

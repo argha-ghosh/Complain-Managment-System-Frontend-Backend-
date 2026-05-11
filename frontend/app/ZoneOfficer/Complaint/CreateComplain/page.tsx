@@ -2,7 +2,8 @@
 
 import z from "zod";
 import { useState, ChangeEvent, SyntheticEvent, useEffect } from "react";
-import Header from "../../../components/header";
+import Header from "../../../../components/header";
+import axios from "axios";
 
 
 const ZoneOfficerHomeSchema = z.object({
@@ -41,9 +42,12 @@ export default function ZoneOfficerHomeForm() {
     const [status, setStatus] = useState<string>("");
     const [zoneOfficerId, setZoneOfficerId] = useState<number>(0);
     const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
 
     const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
         e.preventDefault();
+        setError("");
+        setSuccess("");
 
         const result = ZoneOfficerHomeSchema.safeParse({
             zoneName,
@@ -59,13 +63,21 @@ export default function ZoneOfficerHomeForm() {
             return;
         }
 
-        console.log(result.data);
-        setZoneName("");
-        setAreaName("");
-        setDescription("");
-        setStatus("");
-        setZoneOfficerId(0);
-        setError("");
+        //Axios Call — POST /zone-officer/create-complaint
+        axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/create-complaint`, result.data)
+            .then((response) => {
+                console.log(response);
+                setSuccess("Complaint created successfully!");
+                setZoneName("");
+                setAreaName("");
+                setDescription("");
+                setStatus("");
+                setZoneOfficerId(0);
+            })
+            .catch((error) => {
+                console.error(error);
+                setError("Failed to create complaint. Please try again.");
+            });
     };
 
     return (
@@ -73,7 +85,10 @@ export default function ZoneOfficerHomeForm() {
 
             {<Header props={{ page: "Home" }} />}
 
-            <h1>Zone Officer Home</h1>
+
+
+            <h1>Create your complain...</h1>
+            <h1>Make you city cleaner and greener...</h1>
 
             <form onSubmit={handleSubmit}>
                 <div>
@@ -130,6 +145,7 @@ export default function ZoneOfficerHomeForm() {
                 </div>
 
                 {error && <p style={{ color: "red" }}>{error}</p>}
+                {success && <p style={{ color: "green" }}>{success}</p>}
 
                 <button type="submit">Submit</button>
             </form>
