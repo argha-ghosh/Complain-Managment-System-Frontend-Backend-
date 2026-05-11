@@ -10,16 +10,16 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class ZOfficerService {
-        async findByEmail(email: string): Promise<ZOfficerEntity | null> {
-            const normalized = email.trim().toLowerCase();
-            return await this.zOfficerRepository
-                .createQueryBuilder('o')
-                .where('LOWER(TRIM(o.email)) = :email', { email: normalized })
-                .getOne();
-        }
-            async setPasswordHash(userId: number, hashedPassword: string): Promise<void> {
-                await this.zOfficerRepository.update(userId, { password: hashedPassword });
-            }
+    async findByEmail(email: string): Promise<ZOfficerEntity | null> {
+        const normalized = email.trim().toLowerCase();
+        return await this.zOfficerRepository
+            .createQueryBuilder('o')
+            .where('LOWER(TRIM(o.email)) = :email', { email: normalized })
+            .getOne();
+    }
+    async setPasswordHash(userId: number, hashedPassword: string): Promise<void> {
+        await this.zOfficerRepository.update(userId, { password: hashedPassword });
+    }
     constructor(
         @InjectRepository(ZOfficerEntity)
         private readonly zOfficerRepository: Repository<ZOfficerEntity>,
@@ -33,22 +33,31 @@ export class ZOfficerService {
     async create(createZOfficerDto: CreateZoneOfficerDto): Promise<ZOfficerEntity> {
         const hashedPassword = await bcrypt.hash(createZOfficerDto.password!, 10);
         const zoneOfficer = this.zOfficerRepository.create({
-            ...createZOfficerDto,
+            name: createZOfficerDto.name,
             email: createZOfficerDto.email!.trim().toLowerCase(),
             password: hashedPassword,
+            nid: createZOfficerDto.nid !== undefined ? createZOfficerDto.nid.toString() : undefined,
         });
         return (await this.zOfficerRepository.save(zoneOfficer)) as ZOfficerEntity;
     }
 
     //Update Zone Officer by ID
     async updateZoneOfficer(id: number, updateZoneOfficerDto: UpdateZoneOfficerDto): Promise<{ message: string }> {
-        const payload: Partial<UpdateZoneOfficerDto> = { ...updateZoneOfficerDto };
-        if (payload.email !== undefined) {
-            payload.email = payload.email.trim().toLowerCase();
+        const payload: Partial<ZOfficerEntity> = {};
+
+        if (updateZoneOfficerDto.name !== undefined) {
+            payload.name = updateZoneOfficerDto.name;
         }
-        if (payload.password !== undefined && payload.password !== "") {
-            payload.password = await bcrypt.hash(payload.password, 10);
+        if (updateZoneOfficerDto.email !== undefined) {
+            payload.email = updateZoneOfficerDto.email.trim().toLowerCase();
         }
+        if (updateZoneOfficerDto.password !== undefined && updateZoneOfficerDto.password !== "") {
+            payload.password = await bcrypt.hash(updateZoneOfficerDto.password, 10);
+        }
+        if (updateZoneOfficerDto.nid !== undefined) {
+            payload.nid = updateZoneOfficerDto.nid.toString();
+        }
+
         const zoneOfficer = await this.zOfficerRepository.update(id, payload);
         if (zoneOfficer.affected === 0) {
             throw new HttpException(`Zone Officer with ID ${id} not found`, HttpStatus.NOT_FOUND);
@@ -192,7 +201,7 @@ export class ZOfficerService {
     async getOfficerProfile(zoneOfficerId: number): Promise<OfficerProfileEntity> {
         const profile = await this.officerProfileRepository.findOne({
             where: { zoneOfficerId },
-            relations: [zoneOfficerId ?  'zoneOfficer' : ''] 
+            relations: ['zoneOfficer'],
         });
         if (!profile) {
             throw new HttpException(`Profile not found for Officer with ID ${zoneOfficerId}`, HttpStatus.NOT_FOUND);

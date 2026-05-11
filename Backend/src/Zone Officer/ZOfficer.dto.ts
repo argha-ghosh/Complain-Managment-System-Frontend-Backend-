@@ -8,8 +8,8 @@ export class CreateZoneOfficerDto {
   @Matches(/^[a-zA-Z\s]+$/, {
     message: 'Name must contain only letters and spaces',
   })
+  
   name?: string;
-
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-zA-Z0-9]+@gmail\.com$/, {
@@ -23,7 +23,7 @@ export class CreateZoneOfficerDto {
 
   @IsNotEmpty()
   @IsNumber()
-  nid?: string;
+  nid?: number;
 }
 
 export class UpdateZoneOfficerDto {
@@ -32,7 +32,6 @@ export class UpdateZoneOfficerDto {
     message: 'Name must contain only letters and spaces',
   })
   name?: string;
-
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-zA-Z0-9]+@gmail\.com$/, {
@@ -45,7 +44,7 @@ export class UpdateZoneOfficerDto {
 
   @IsNotEmpty()
   @IsNumber()
-  nid?: string;
+  nid?: number;
 }
 
 //Complaint
