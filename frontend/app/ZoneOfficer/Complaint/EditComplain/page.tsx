@@ -90,24 +90,26 @@ export default function Complaints() {
     const printArray = (jsonData: any) => {
         return (
             jsonData.map((item: any, index: number) => (
-                <div key={index} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-                    <h2>complaintId: {item.complaintId}</h2>
-                    <h2>zoneName: {item.zoneName}</h2>
-                    <h2>areaName: {item.areaName}</h2>
-                    <h2>description: {item.description}</h2>
-                    <h2>status: {item.status}</h2>
-                    <h2>zoneOfficerId: {item.zoneOfficerId}</h2>
+                <div key={index} className="bg-white shadow-lg rounded-lg p-6 mb-6">
+                    <div className="bg-gray-100 p-4 rounded-lg border border-gray-300 mb-4">
+                        <div className="text-lg font-bold text-gray-800">Complaint ID: {item.complaintId}</div>
+                        <div className="text-md text-gray-600">Zone: {item.zoneName} - Area: {item.areaName}</div>
+                        <div className="mt-2 text-gray-600">Description: {item.description}</div>
+                        <div className="mt-2 text-gray-600">Status: {item.status}</div>
+                        <div className="mt-2 text-gray-600">Zone Officer ID: {item.zoneOfficerId}</div>
+                    </div>
 
                     {/* PATCH — Update Status */}
-                    <div style={{ marginTop: "8px" }}>
-                        <label>Update Status: </label>
+                    <div className="status-update mt-4">
+                        <label htmlFor={`status-${item.complaintId}`} className="block text-sm text-gray-700">Update Status: </label>
                         <select
+                            id={`status-${item.complaintId}`}
                             value={selectedStatus[item.complaintId] || item.status}
                             onChange={(e) => setSelectedStatus((prev) => ({
                                 ...prev,
                                 [item.complaintId]: e.target.value
                             }))}
-                            className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="status-select border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                             <option value="Pending">Pending</option>
                             <option value="In Progress">In Progress</option>
@@ -115,107 +117,64 @@ export default function Complaints() {
                         </select>
                         <button
                             onClick={() => updateStatus(item.complaintId)}
-                            style={{ marginLeft: "8px" }}
+                            className="status-update-btn ml-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-all"
                         >
                             Update Status
                         </button>
                     </div>
 
                     {/* DELETE */}
-                    <div style={{ marginTop: "8px" }}>
+                    <div className="mt-4">
                         <button
                             onClick={() => deleteComplaint(item.complaintId)}
-                            style={{ color: "red" }}
+                            className="delete-btn text-red-600 hover:text-re-800 transition-all"
                         >
                             Delete
                         </button>
                     </div>
-
-                    <hr />
                 </div>
             ))
         );
     };
 
-    // const printObject = (jsonData: any) => {
-    //     return (
-    //         <div style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-    //             <h2>complaintId: {jsonData.complaintId}</h2>
-    //             <h2>zoneName: {jsonData.zoneName}</h2>
-    //             <h2>areaName: {jsonData.areaName}</h2>
-    //             <h2>description: {jsonData.description}</h2>
-    //             <h2>status: {jsonData.status}</h2>
-    //             <h2>zoneOfficerId: {jsonData.zoneOfficerId}</h2>
-
-    //             {/* PATCH — Update Status */}
-    //             <div style={{ marginTop: "8px" }}>
-    //                 <label>Update Status: </label>
-    //                 <select
-    //                     value={selectedStatus[jsonData.complaintId] || jsonData.status}
-    //                     onChange={(e) => setSelectedStatus((prev) => ({
-    //                         ...prev,
-    //                         [jsonData.complaintId]: e.target.value
-    //                     }))}
-    //                     className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    //                 >
-    //                     <option value="Pending">Pending</option>
-    //                     <option value="In Progress">In Progress</option>
-    //                     <option value="Resolved">Resolved</option>
-    //                 </select>
-    //                 <button
-    //                     onClick={() => updateStatus(jsonData.complaintId)}
-    //                     style={{ marginLeft: "8px" }}
-    //                 >
-    //                     Update Status
-    //                 </button>
-    //             </div>
-
-    //             {/* DELETE */}
-    //             <div style={{ marginTop: "8px" }}>
-    //                 <button
-    //                     onClick={() => deleteComplaint(jsonData.complaintId)}
-    //                     style={{ color: "red" }}
-    //                 >
-    //                     Delete
-    //                 </button>
-    //             </div>
-    //             <hr />
-    //         </div>
-    //     );
-    // };
-
     return (
         <>
-            {<Header props={{ page: "Complaints" }} />}
+            {/* <Header props={{ page: "Complaints" }} /> */}
 
-            <h1>Complaints</h1>
+            {/* Emoji and Title Section */}
+            <div className="text-center mb-6">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-yellow-300 text-green-600 text-3xl mb-4">
+                    🌿
+                </div>
+                <h1 className="text-5xl font-extrabold text-gray-800">Complaints</h1>
+            </div>
 
             {/* GET — Fetch Complaints by Officer ID */}
-            <form onSubmit={fetchComplaints}>
-                <div>
-                    <label htmlFor="officerId">Zone Officer ID:</label>
+            <form onSubmit={fetchComplaints} className="flex justify-center mb-6">
+                <div className="flex items-center space-x-4">
+                    <label htmlFor="officerId" className="text-lg">Zone Officer ID:</label>
                     <input
                         type="number"
                         id="officerId"
                         value={officerId}
                         onChange={(e) => setOfficerId(Number(e.target.value))}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="input-field border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    {fetchError && <p className="error-message text-red-500">{fetchError}</p>}
+                    <button type="submit" className="fetch-button bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-all">
+                        Get Complaints
+                    </button>
                 </div>
-
-                {fetchError && <p style={{ color: "red" }}>{fetchError}</p>}
-
-                <button type="submit">Get Complaints</button>
             </form>
 
             {/* PATCH / DELETE feedback messages */}
-            {patchSuccess && <p style={{ color: "green" }}>{patchSuccess}</p>}
-            {patchError && <p style={{ color: "red" }}>{patchError}</p>}
-            {deleteSuccess && <p style={{ color: "green" }}>{deleteSuccess}</p>}
-            {deleteError && <p style={{ color: "red" }}>{deleteError}</p>}
+            {patchSuccess && <p className="success-message text-green-600">{patchSuccess}</p>}
+            {patchError && <p className="error-message text-red-600">{patchError}</p>}
+            {deleteSuccess && <p className="success-message text-green-600">{deleteSuccess}</p>}
+            {deleteError && <p className="error-message text-red-600">{deleteError}</p>}
 
             {/* Display Complaints */}
-            <div style={{ marginTop: "20px" }}>
+            <div className="complaints-container">
                 {jsonData != null && (
                     <div>
                         {Array.isArray(jsonData) ? printArray(jsonData) : printArray([jsonData])}
@@ -223,7 +182,98 @@ export default function Complaints() {
                 )}
             </div>
 
-            <Footer />  
-        </> 
+            <Footer />
+            
+            <style jsx>{`
+                .status-update {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .status-select {
+                    border: 1px solid #ccc;
+                    border-radius: 4px;
+                    padding: 0.5rem;
+                    margin-top: 0.5rem;
+                    font-size: 1rem;
+                    outline: none;
+                }
+
+                .status-update-btn {
+                    margin-left: 8px;
+                    padding: 6px 12px;
+                    background-color: #38a169;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
+                .status-update-btn:hover {
+                    background-color: #2f855a;
+                }
+
+                .delete-btn {
+                    color: red;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+
+                .delete-btn:hover {
+                    color: #c53030;
+                }
+
+                .fetch-button {
+                    background-color: #3182ce;
+                    color: white;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                }
+
+                .fetch-button:hover {
+                    background-color: #2b6cb0;
+                }
+
+                .input-field {
+                    padding: 8px;
+                    font-size: 1rem;
+                    border-radius: 4px;
+                    border: 1px solid #ccc;
+                    outline: none;
+                }
+
+                .error-message {
+                    color: red;
+                    font-size: 0.875rem;
+                    margin-top: 10px;
+                }
+
+                .success-message {
+                    color: green;
+                    font-size: 1rem;
+                    margin-top: 10px;
+                }
+
+                .complaints-container {
+                    margin-top: 20px;
+                }
+
+                /* Page background gradient (Gray to Green) */
+                .page-wrapper {
+                    background: linear-gradient(to bottom right, #e2e8f0, #c6f6d5);
+                    min-height: 100vh;
+                    padding: 2rem;
+                }
+
+                /* Emoji + Title */
+                .inline-flex {
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            `}</style>
+        </>
     );
-}
+} 

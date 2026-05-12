@@ -48,8 +48,8 @@ export default function RootLayout({
               <NavLink href="/ZoneOfficer">Zone Officers</NavLink>
               <NavLink href="/ZoneOfficer/SignUp">Sign Up</NavLink>
               {/* <NavLink href="/ZoneOfficer/EditOfficer">Edit Officer</NavLink> */}
-              <NavLink href="/ZoneOfficer/Complaint/CreateComplain">Create Complaint</NavLink>
-              <NavLink href="/ZoneOfficer/Complaint/EditComplain">Edit Complaint</NavLink>
+              <NavLink href="/ZoneOfficer/Complaint/CreateComplain">Create Complain</NavLink>
+              <NavLink href="/ZoneOfficer/Complaint/EditComplain">Edit Complain</NavLink>
             </div>
           </div>
         </nav>
