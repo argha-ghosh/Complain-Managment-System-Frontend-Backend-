@@ -3,6 +3,7 @@
 import z from "zod";
 import { useState, SyntheticEvent } from "react";
 import Header from "../../../components/header";
+import Footer from "../../../components/footer";
 import axios from "axios";
 
 const ZoneOfficerLogInSchema = z.object({
@@ -74,61 +75,93 @@ export default function ZoneOfficerLogInForm() {
     };
 
     return (
-        <>
-            {<Header props={{ page: "Zone Officer Log In" }} />}
+        <div className="page-wrapper">
+            <Header props={{ page: "Zone Officer Sign Up" }} />
 
-            <h1>Zone Officer Log In</h1>
-
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+            <main className="page-container">
+                <div className="text-center mb-8">
+                    <h1 className="page-title">Create Account</h1>
+                    <p className="page-subtitle">Register a new zone officer in the system</p>
                 </div>
 
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                <div className="card">
+                    <form onSubmit={handleSubmit} className="form">
+                        <div className="form-group">
+                            <label htmlFor="name" className="form-label">Full Name</label>
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="Enter full name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="form-input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="email" className="form-label">Email Address</label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="name@gmail.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="form-input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password" className="form-label">Password</label>
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="form-input"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="nid" className="form-label">NID (10 Digits)</label>
+                            <input
+                                type="text"
+                                id="nid"
+                                placeholder="1234567890"
+                                value={nid}
+                                onChange={(e) => setNID(e.target.value)}
+                                className="form-input"
+                            />
+                        </div>
+
+                        {error && (
+                            <div className="alert-error">
+                                {error}
+                            </div>
+                        )}
+
+                        {success && (
+                            <div className="alert-success">
+                                {success}
+                            </div>
+                        )}
+
+                        <div className="pt-4">
+                            <button type="submit" className="btn-primary">
+                                Create Officer Account
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
-                <div>
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                <div className="mt-8 text-center">
+                    <a href="/ZoneOfficer" className="text-sm text-blue-600 hover:underline">
+                        ← Back to All Officers
+                    </a>
                 </div>
+            </main>
 
-                <div>
-                    <label htmlFor="nid">NID:</label>
-                    <input
-                        type="text"
-                        id="nid"
-                        value={nid}
-                        onChange={(e) => setNID(e.target.value)}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                {success && <p style={{ color: "green" }}>{success}</p>}
-
-                <button type="submit">Submit</button>
-            </form>
-        </>
+            <Footer />
+        </div>
     );
 }

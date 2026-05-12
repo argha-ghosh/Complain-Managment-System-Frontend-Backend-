@@ -17,12 +17,14 @@ export default function Header({ props }: { props?: any }) {
             </Head>
             <header>
                 <h1>You are in {page} </h1>
-                <nav>
+                {/* <nav>
                     <Link href="/">Home</Link> |
                     <Link href="/ZoneOfficer/Complaint/CreateComplain">Create Complain</Link> |
-                    <Link href="/ZoneOfficer/Complaint/DeleteComplain">Delete Complain</Link> |
+                    <Link href="/ZoneOfficer/Complaint/EditComplain">Edit Complain</Link> |
+                    <Link href="/ZoneOfficer/AllOfficers">All Officers</Link> |
+                    <Link href="/ZoneOfficer/EditOfficer">Edit Officer</Link> |
                     <Link href="/ZoneOfficer/SignUp">Sign Up</Link>
-                </nav>
+                </nav> */}
             </header>
         </>
     );

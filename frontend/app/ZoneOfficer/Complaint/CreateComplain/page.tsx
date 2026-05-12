@@ -3,6 +3,7 @@
 import z from "zod";
 import { useState, ChangeEvent, SyntheticEvent, useEffect } from "react";
 import Header from "../../../../components/header";
+import Footer from "@/components/footer";       
 import axios from "axios";
 
 
@@ -85,8 +86,6 @@ export default function ZoneOfficerHomeForm() {
 
             {<Header props={{ page: "Home" }} />}
 
-
-
             <h1>Create your complain...</h1>
             <h1>Make you city cleaner and greener...</h1>
 
@@ -149,6 +148,8 @@ export default function ZoneOfficerHomeForm() {
 
                 <button type="submit">Submit</button>
             </form>
+
+            <Footer />  
         </>
     );
 }
