@@ -4,9 +4,6 @@ import { CreateZoneOfficerDto, UpdateZoneOfficerDto, CreateComplaintDto, UpdateC
 import { diskStorage, MulterError } from "multer";
 import { FileInterceptor } from "@nestjs/platform-express";
 
-
-
-
 @Controller('zone-officer')
 export class ZOfficerController {
   constructor(private readonly ZOfficerService: ZOfficerService) { }
@@ -19,7 +16,7 @@ export class ZOfficerController {
     return this.ZOfficerService.create(CreateZoneOfficerDto);
   }
 
-  //Update Zone Officer by ID 
+  //Update Zone Officer by ID
   @Put('update/:id')
   async updateZoneOfficer(@Param('id') id: number, @Body() UpdateZoneOfficerDto: UpdateZoneOfficerDto):
     Promise<{ message: string }> {
@@ -32,19 +29,10 @@ export class ZOfficerController {
     return this.ZOfficerService.deleteZoneOfficer(id);
   }
 
-  //Get Zone Officer Details
+  //Get All Zone Officers
   @Get('all')
   async getAllZoneOfficers() {
     return await this.ZOfficerService.findAll();
-  }
-  //Get Zone Officer by ID
-  @Get(':id')
-  async getZoneOfficerById(@Param('id') id: string) {
-    const parsedId = parseInt(id, 10);
-    if (isNaN(parsedId)) {
-      throw new HttpException('Invalid ID format', HttpStatus.BAD_REQUEST);
-    }
-    return await this.ZOfficerService.findOne(parsedId);
   }
 
   //Complaint
@@ -75,14 +63,24 @@ export class ZOfficerController {
   async getComplaintById(@Param('id', ParseIntPipe) id: number) {
     return await this.ZOfficerService.getComplaintById(id);
   }
-  // @Get('complaint/:id')
-  // async getComplaintById(@Param('id') id: string) {  // id is a string
-  //   const parsedId = parseInt(id, 10); // Convert id to number here
-  //   if (isNaN(parsedId)) {
-  //     throw new HttpException('Invalid ID format', HttpStatus.BAD_REQUEST);
-  //   }
-  //   return await this.ZOfficerService.getComplaintById(parsedId);
-  // }
+
+  //Get Complaints by Zone Officer
+  @Get('officer/:officerId/complaints')
+  async getComplaintsByOfficer(@Param('officerId', ParseIntPipe) officerId: number) {
+    return await this.ZOfficerService.getComplaintsByOfficer(officerId);
+  }
+
+  // MOVED TO BOTTOM — @Get(':id') must always be last
+  // otherwise it intercepts all other GET routes like
+  // officer/:officerId/complaints, complaint/:id, etc.
+  @Get(':id')
+  async getZoneOfficerById(@Param('id') id: string) {
+    const parsedId = parseInt(id, 10);
+    if (isNaN(parsedId)) {
+      throw new HttpException('Invalid ID format', HttpStatus.BAD_REQUEST);
+    }
+    return await this.ZOfficerService.findOne(parsedId);
+  }
 
 
   //Officer Profile
@@ -91,12 +89,6 @@ export class ZOfficerController {
   @UsePipes(new ValidationPipe())
   async createOfficerProfile(@Body() createOfficerProfileDto: CreateOfficerProfileDto) {
     return await this.ZOfficerService.createOfficerProfile(createOfficerProfileDto);
-  }
-
-  //Get Complaints by Zone Officer
-  @Get('officer/:officerId/complaints')
-  async getComplaintsByOfficer(@Param('officerId', ParseIntPipe) officerId: number) {
-    return await this.ZOfficerService.getComplaintsByOfficer(officerId);
   }
 
   //Get Officer Profile (One-to-One)
