@@ -39,9 +39,17 @@ export default function LoginPage() {
         axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`, result.data)
             .then((response) => {
                 console.log(response);
-                localStorage.setItem("token", response.data.access_token);
-                localStorage.setItem("user", JSON.stringify(response.data.user));
-                router.push("/");
+                const token = response.data.access_token;
+                const user = response.data.user;
+
+                // ✅ Save to localStorage (for navbar)
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(user));
+
+                // ✅ Save to cookie (for middleware page protection)
+                document.cookie = `token=${token}; path=/; max-age=86400`;
+
+                window.location.href = "/";
             })
             .catch((error) => {
                 console.error(error);
@@ -69,7 +77,6 @@ export default function LoginPage() {
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
                     <form onSubmit={handleSubmit} className="space-y-5">
 
-                        {/* Email */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="email" className="text-sm font-medium text-gray-700">
                                 Email
@@ -84,7 +91,6 @@ export default function LoginPage() {
                             />
                         </div>
 
-                        {/* Password */}
                         <div className="flex flex-col gap-1">
                             <label htmlFor="password" className="text-sm font-medium text-gray-700">
                                 Password
@@ -99,14 +105,12 @@ export default function LoginPage() {
                             />
                         </div>
 
-                        {/* Error */}
                         {error && (
                             <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3">
                                 {error}
                             </div>
                         )}
 
-                        {/* Submit */}
                         <button
                             type="submit"
                             disabled={loading}

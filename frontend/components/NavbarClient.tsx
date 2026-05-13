@@ -20,8 +20,11 @@ export default function NavbarClient() {
     }, []);
 
     function handleLogout() {
+        // ✅ Clear localStorage
         localStorage.removeItem("token");
         localStorage.removeItem("user");
+        // ✅ Clear cookie so middleware also logs out
+        document.cookie = "token=; path=/; max-age=0";
         setIsLoggedIn(false);
         router.push("/login");
     }
@@ -41,6 +44,7 @@ export default function NavbarClient() {
                 {/* Nav Links */}
                 <div className="flex items-center gap-1">
                     <NavLink href="/">Home</NavLink>
+                    {/* <NavLink href="/About">About</NavLink> */}
                     <NavLink href="/ZoneOfficer">Zone Officers</NavLink>
                     <NavLink href="/ZoneOfficer/SignUp">Sign Up</NavLink>
                     <NavLink href="/ZoneOfficer/Complaint/CreateComplain">Create Complaint</NavLink>

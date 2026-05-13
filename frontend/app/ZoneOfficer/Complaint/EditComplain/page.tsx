@@ -92,7 +92,8 @@ export default function Complaints() {
                 <div key={index} className="bg-white shadow-lg rounded-lg p-6 mb-6">
                     <div className="bg-gray-100 p-4 rounded-lg border border-gray-300 mb-4">
                         <div className="text-lg font-bold text-gray-800">Complaint ID: {item.complaintId}</div>
-                        <div className="text-md text-gray-600">Zone: {item.zoneName} - Area: {item.areaName}</div>
+                        <div className="mt-2 text-gray-600">Zone: {item.zoneName}</div>
+                        <div className="mt-2 text-gray-600">Area: {item.areaName}</div>
                         <div className="mt-2 text-gray-600">Description: {item.description}</div>
                         <div className="mt-2 text-gray-600">Status: {item.status}</div>
                         <div className="mt-2 text-gray-600">Zone Officer ID: {item.zoneOfficerId}</div>

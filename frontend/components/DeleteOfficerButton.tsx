@@ -12,7 +12,7 @@ export default function DeleteOfficerButton({ id }: { id: string }) {
         axios.delete(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/delete-zone-officer/${id}`)
             .then(() => {
                 alert("Officer deleted successfully!");
-                router.push("/ZoneOfficer/AllOfficers");  // redirect after delete
+                router.push("/ZoneOfficer");  // redirect after delete
             })
             .catch((error) => {
                 console.error(error);
