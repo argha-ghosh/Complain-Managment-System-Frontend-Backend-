@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavbarClient from "@/components/NavbarClient";
+import PusherNotification from "@/components/PusherNotification";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,15 +34,13 @@ export default function RootLayout({
         {/* ── Navbar ── */}
         <NavbarClient />
 
+        {/* ✅ Pusher Beams — runs in background, registers for notifications */}
+        <PusherNotification />
+
         {/* ── Page content ── */}
         <main className="flex-1">
           {children}
         </main>
-
-        {/* ── Footer ── */}
-        {/* <footer className="border-t border-gray-200 bg-white text-center py-4 text-xs text-gray-400">
-          © {new Date().getFullYear()} ZonePortal · City Complaint Management
-        </footer> */}
 
       </body>
     </html>
