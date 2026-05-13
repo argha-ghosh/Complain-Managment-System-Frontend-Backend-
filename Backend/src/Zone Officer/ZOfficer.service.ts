@@ -5,7 +5,7 @@ import { CreateZoneOfficerDto, UpdateZoneOfficerDto, CreateComplaintDto, CreateO
 import { ComplaintEntity, ZOfficerEntity, OfficerProfileEntity } from "./ZOfficer.entity";
 import { HttpException, HttpStatus } from "@nestjs/common";
 import * as bcrypt from 'bcryptjs';
-
+import { notifyComplaintCreated } from "../pusher/pusher.service";
 
 
 @Injectable()
@@ -114,20 +114,34 @@ export class ZOfficerService {
 
     //Complaint
     //Create Complaint with One-to-Many relationship
-    async createComplaint(CreateComplaintDto: CreateComplaintDto & { zoneOfficerId?: number }): Promise<ComplaintEntity> {
+    async createComplaint(
+        CreateComplaintDto: CreateComplaintDto & { zoneOfficerId?: number }
+    ): Promise<ComplaintEntity> {
         const complaint = this.complaintRepository.create(CreateComplaintDto);
 
-        // If zoneOfficerId provided, validate and assign
         if (CreateComplaintDto.zoneOfficerId) {
-            const zoneOfficer = await this.zOfficerRepository.findOneBy({ id: CreateComplaintDto.zoneOfficerId });
+            const zoneOfficer = await this.zOfficerRepository.findOneBy({
+                id: CreateComplaintDto.zoneOfficerId,
+            });
             if (!zoneOfficer) {
-                throw new HttpException(`Zone Officer with ID ${CreateComplaintDto.zoneOfficerId} not found`, HttpStatus.NOT_FOUND);
+                throw new HttpException(
+                    `Zone Officer with ID ${CreateComplaintDto.zoneOfficerId} not found`,
+                    HttpStatus.NOT_FOUND
+                );
             }
             complaint.zoneOfficer = zoneOfficer;
             complaint.zoneOfficerId = CreateComplaintDto.zoneOfficerId;
         }
 
-        return (await this.complaintRepository.save(complaint)) as ComplaintEntity;
+        const saved = (await this.complaintRepository.save(complaint)) as ComplaintEntity;
+
+        // ✅ Send Pusher Beams notification after complaint is saved
+        await notifyComplaintCreated(
+            CreateComplaintDto.zoneName || "Unknown Zone",
+            CreateComplaintDto.areaName || "Unknown Area"
+        );
+
+        return saved;
     }
 
     //Update Status only

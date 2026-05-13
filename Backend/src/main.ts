@@ -1,5 +1,10 @@
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+
+// ✅ Load environment variables FIRST with explicit path
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
