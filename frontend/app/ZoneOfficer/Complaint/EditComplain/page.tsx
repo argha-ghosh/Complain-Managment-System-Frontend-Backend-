@@ -9,7 +9,7 @@ export default function Complaints() {
     const [officerId, setOfficerId] = useState<number>(0);
     const [jsonData, setJsonData] = useState(null);
     const [fetchError, setFetchError] = useState<string>("");
-    const [selectedStatus, setSelectedStatus] = useState<{ [key: number]: string }>({});  // For PATCH — track status per complaint
+    const [selectedStatus, setSelectedStatus] = useState<{ [key: number]: string }>({});
     const [patchSuccess, setPatchSuccess] = useState<string>("");
     const [patchError, setPatchError] = useState<string>("");
     const [deleteSuccess, setDeleteSuccess] = useState<string>("");
@@ -76,7 +76,6 @@ export default function Complaints() {
             .then((response) => {
                 console.log(response);
                 setDeleteSuccess(`Complaint ID ${complaintId} deleted successfully!`);
-                // Refresh after delete
                 axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/officer/${officerId}/complaints`)
                     .then((res) => setJsonData(res.data))
                     .catch((err) => console.error(err));
@@ -123,13 +122,13 @@ export default function Complaints() {
                         </button>
                     </div>
 
-                    {/* DELETE */}
+                    {/* ✅ CHANGED — Delete button now visible with red background */}
                     <div className="mt-4">
                         <button
                             onClick={() => deleteComplaint(item.complaintId)}
-                            className="delete-btn text-red-600 hover:text-re-800 transition-all"
+                            className="bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-2 rounded-lg transition-all"
                         >
-                            Delete
+                            🗑 Delete
                         </button>
                     </div>
                 </div>
@@ -138,11 +137,13 @@ export default function Complaints() {
     };
 
     return (
-        <>
+        // ✅ CHANGED — background color to green mixed with light gray
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-green-100">
+
             {/* <Header props={{ page: "Complaints" }} /> */}
 
             {/* Emoji and Title Section */}
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 pt-10">
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-yellow-300 text-green-600 text-3xl mb-4">
                     🌿
                 </div>
@@ -168,13 +169,13 @@ export default function Complaints() {
             </form>
 
             {/* PATCH / DELETE feedback messages */}
-            {patchSuccess && <p className="success-message text-green-600">{patchSuccess}</p>}
-            {patchError && <p className="error-message text-red-600">{patchError}</p>}
-            {deleteSuccess && <p className="success-message text-green-600">{deleteSuccess}</p>}
-            {deleteError && <p className="error-message text-red-600">{deleteError}</p>}
+            {patchSuccess && <p className="text-center text-green-600">{patchSuccess}</p>}
+            {patchError && <p className="text-center text-red-600">{patchError}</p>}
+            {deleteSuccess && <p className="text-center text-green-600">{deleteSuccess}</p>}
+            {deleteError && <p className="text-center text-red-600">{deleteError}</p>}
 
             {/* Display Complaints */}
-            <div className="complaints-container">
+            <div className="max-w-3xl mx-auto px-4 mt-6 pb-10">
                 {jsonData != null && (
                     <div>
                         {Array.isArray(jsonData) ? printArray(jsonData) : printArray([jsonData])}
@@ -183,97 +184,6 @@ export default function Complaints() {
             </div>
 
             <Footer />
-            
-            <style jsx>{`
-                .status-update {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .status-select {
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    padding: 0.5rem;
-                    margin-top: 0.5rem;
-                    font-size: 1rem;
-                    outline: none;
-                }
-
-                .status-update-btn {
-                    margin-left: 8px;
-                    padding: 6px 12px;
-                    background-color: #38a169;
-                    color: white;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                }
-
-                .status-update-btn:hover {
-                    background-color: #2f855a;
-                }
-
-                .delete-btn {
-                    color: red;
-                    cursor: pointer;
-                    font-weight: bold;
-                }
-
-                .delete-btn:hover {
-                    color: #c53030;
-                }
-
-                .fetch-button {
-                    background-color: #3182ce;
-                    color: white;
-                    padding: 10px 20px;
-                    border: none;
-                    border-radius: 6px;
-                    cursor: pointer;
-                }
-
-                .fetch-button:hover {
-                    background-color: #2b6cb0;
-                }
-
-                .input-field {
-                    padding: 8px;
-                    font-size: 1rem;
-                    border-radius: 4px;
-                    border: 1px solid #ccc;
-                    outline: none;
-                }
-
-                .error-message {
-                    color: red;
-                    font-size: 0.875rem;
-                    margin-top: 10px;
-                }
-
-                .success-message {
-                    color: green;
-                    font-size: 1rem;
-                    margin-top: 10px;
-                }
-
-                .complaints-container {
-                    margin-top: 20px;
-                }
-
-                /* Page background gradient (Gray to Green) */
-                .page-wrapper {
-                    background: linear-gradient(to bottom right, #e2e8f0, #c6f6d5);
-                    min-height: 100vh;
-                    padding: 2rem;
-                }
-
-                /* Emoji + Title */
-                .inline-flex {
-                    display: inline-flex;
-                    justify-content: center;
-                    align-items: center;
-                }
-            `}</style>
-        </>
+        </div>
     );
-} 
+}
