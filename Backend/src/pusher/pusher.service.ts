@@ -39,6 +39,7 @@ export async function notifyComplaintCreated(
                 notification: {
                     title: "🌿 New Complaint Submitted",
                     body: `Zone: ${zoneName} — Area: ${areaName} `,
+
                     icon: "https://cdn-icons-png.flaticon.com/512/2452/2452565.png",
                 },
             },
