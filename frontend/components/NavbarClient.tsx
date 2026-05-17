@@ -33,7 +33,6 @@ export default function NavbarClient() {
         <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
 
-                {/* Brand */}
                 <Link
                     href="/"
                     className="font-bold text-green-600 text-lg tracking-tight hover:opacity-80 transition-opacity"
@@ -41,35 +40,37 @@ export default function NavbarClient() {
                     🌿 ZonePortal
                 </Link>
 
-                {/* Nav Links */}
                 <div className="flex items-center gap-1">
                     <NavLink href="/">Home</NavLink>
-                    {/* <NavLink href="/About">About</NavLink> */}
-                    <NavLink href="/ZoneOfficer">Zone Officers</NavLink>
-                    <NavLink href="/ZoneOfficer/SignUp">Sign Up</NavLink>
-                    <NavLink href="/ZoneOfficer/Complaint/CreateComplain">Create Complaint</NavLink>
-                    <NavLink href="/ZoneOfficer/Complaint/EditComplain">Edit Complaint</NavLink>
 
-                    {/* Login / Logout */}
                     {isLoggedIn ? (
-                        <div className="flex items-center gap-3 ml-3">
-                            <span className="text-sm text-gray-600 font-medium">
-                                👤 {userName}
-                            </span>
-                            <button
-                                onClick={handleLogout}
-                                className="px-3 py-1.5 rounded-md text-sm text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors font-medium border border-red-200"
-                            >
-                                Logout
-                            </button>
-                        </div>
+                        <>
+                            <NavLink href="/ZoneOfficer">Zone Officers</NavLink>
+                            <NavLink href="/ZoneOfficer/Complaint/CreateComplain">Create Complaint</NavLink>
+                            <NavLink href="/ZoneOfficer/Complaint/EditComplain">Edit Complaint</NavLink>
+                            <div className="flex items-center gap-3 ml-3">
+                                <span className="text-sm text-gray-600 font-medium">
+                                    👤 {userName}
+                                </span>
+                                <button
+                                    onClick={handleLogout}
+                                    className="px-3 py-1.5 rounded-md text-sm text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors font-medium border border-red-200"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </>
                     ) : (
-                        <Link
-                            href="/login"
-                            className="ml-3 px-4 py-1.5 rounded-md text-sm text-white bg-green-600 hover:bg-green-700 transition-colors font-medium"
-                        >
-                            Login
-                        </Link>
+                        // Not logged in show only login and signup
+                        <>
+                            <NavLink href="/ZoneOfficer/SignUp">Sign Up</NavLink>
+                            <Link
+                                href="/login"
+                                className="ml-3 px-4 py-1.5 rounded-md text-sm text-white bg-green-600 hover:bg-green-700 transition-colors font-medium"
+                            >
+                                Login
+                            </Link>
+                        </>
                     )}
                 </div>
             </div>

@@ -4,4 +4,4 @@ export default function Footer() {
             © {new Date().getFullYear()} ZonePortal · City Complaint Management
         </footer>
     );
-}
+}``
