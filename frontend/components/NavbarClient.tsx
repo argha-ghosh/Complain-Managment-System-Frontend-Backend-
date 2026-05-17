@@ -20,10 +20,10 @@ export default function NavbarClient() {
     }, []);
 
     function handleLogout() {
-        // ✅ Clear localStorage
+        // Clear localStorage
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-        // ✅ Clear cookie so middleware also logs out
+        // Clear cookie so middleware also logs out
         document.cookie = "token=; path=/; max-age=0";
         setIsLoggedIn(false);
         router.push("/login");

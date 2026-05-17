@@ -9,7 +9,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-green-50 to-gray-100 py-20 px-4 text-center">
         <h1 className="text-4xl font-bold text-gray-800 mb-3">
-          Welcome to Zone Portal 🌿
+          Dhaka Road & Drainage Issue Reporting System 🌿
         </h1>
         <p className="text-gray-500 text-base mb-8 max-w-xl mx-auto">
           A simple platform to manage city complaints, track zone officers, and keep your city clean and green.

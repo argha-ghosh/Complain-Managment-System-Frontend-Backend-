@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// ✅ Pages everyone can access WITHOUT login
+// Pages everyone can access WITHOUT login
 const publicRoutes = ["/", "/login", "/about", "/ZoneOfficer/SignUp"];
 
 export function middleware(request: NextRequest) {
@@ -20,7 +20,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 
-// ✅ Apply middleware to all routes except static files
+// Apply middleware to all routes except static files
 export const config = {
     matcher: [
         "/((?!_next/static|_next/image|favicon.ico).*)",

@@ -35,18 +35,18 @@ export default function LoginPage() {
 
         setLoading(true);
 
-        // ✅ Axios Call — POST /auth/login
+        //  Axios Call — POST /auth/login
         axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`, result.data)
             .then((response) => {
                 console.log(response);
                 const token = response.data.access_token;
                 const user = response.data.user;
 
-                // ✅ Save to localStorage (for navbar)
+                //  Save to localStorage (for navbar)
                 localStorage.setItem("token", token);
                 localStorage.setItem("user", JSON.stringify(user));
 
-                // ✅ Save to cookie (for middleware page protection)
+                // Save to cookie (for middleware page protection)
                 document.cookie = `token=${token}; path=/; max-age=86400`;
 
                 window.location.href = "/";
