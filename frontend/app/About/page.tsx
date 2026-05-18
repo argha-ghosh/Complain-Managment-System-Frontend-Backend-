@@ -118,13 +118,13 @@ export default function AboutPage() {
                     Join ZonePortal and start managing city complaints today.
                 </p>
                 <div className="flex justify-center gap-4 flex-wrap">
-                    <Link href="/ZoneOfficer/SignUp">
+                    {/* <Link href="/ZoneOfficer/SignUp">
                         <span className="inline-block px-6 py-3 bg-white text-green-700 font-semibold text-sm rounded-lg hover:bg-green-50 transition-all">
                             Sign Up Now
                         </span>
-                    </Link>
+                    </Link> */}
                     <Link href="/ZoneOfficer/Complaint/CreateComplain">
-                        <span className="inline-block px-6 py-3 bg-green-600 border border-white/30 text-white font-semibold text-sm rounded-lg hover:bg-green-500 transition-all">
+                        <span className="inline-block px-6 py-3 bg-white border border-gray-300 text-black font-semibold text-sm rounded-lg hover:bg-gray-100 transition-all">
                             Create Complaint
                         </span>
                     </Link>

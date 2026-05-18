@@ -2,11 +2,9 @@
 
 import z from "zod";
 import { useState, SyntheticEvent } from "react";
-import Header from "../../../components/header";
 import Footer from "../../../components/footer";
 import axios from "axios";
 
-// Validation Schema
 const ZoneOfficerLogInSchema = z.object({
     name: z
         .string()
@@ -44,12 +42,7 @@ export default function ZoneOfficerLogInForm() {
         setError("");
         setSuccess("");
 
-        const result = ZoneOfficerLogInSchema.safeParse({
-            name,
-            email,
-            password,
-            nid,
-        });
+        const result = ZoneOfficerLogInSchema.safeParse({ name, email, password, nid });
 
         if (!result.success) {
             setError(result.error.issues[0]?.message || "Validation error");
@@ -76,97 +69,106 @@ export default function ZoneOfficerLogInForm() {
     };
 
     return (
-        <div className="page-wrapper">
+        <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-green-50">
 
-            {/* <Header props={{ page: "Create Officer Account Page" }} /> */}
-
-            {/* Centered Header with Emoji */}
-            <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 text-3xl mb-4">
+            {/* ── Hero Banner ── */}
+            <div className="py-8 px-4 text-center">
+                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 text-3xl mb-4">
                     🌳
                 </div>
-                <h1 className="text-4xl font-bold text-gray-800">
-                    Create Officer Account Page
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">
+                    Create Officer Account
                 </h1>
+                <p className="text-gray-500 text-sm">
+                    Register a new zone officer in the system
+                </p>
             </div>
 
-            <main className="page-container">
-                <div className="text-center mb-8">
-                    <h1 className="page-title">Create Account</h1>
-                    <p className="page-subtitle">Register a new zone officer in the system</p>
-                </div>
+            {/* ── Form Card ── */}
+            <main className="max-w-2xl mx-auto px-4 py-10">
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
 
-                <div className="card">
-                    <form onSubmit={handleSubmit} className="form">
-                        <div className="form-group">
-                            <label htmlFor="name" className="form-label">Full Name</label>
+                    <form onSubmit={handleSubmit} className="space-y-5">
+
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="name" className="text-sm font-medium text-gray-700">
+                                Full Name
+                            </label>
                             <input
                                 type="text"
                                 id="name"
                                 placeholder="Enter full name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="form-input"
+                                className="border border-gray-300 rounded-lg py-2.5 px-4 text-sm w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="email" className="form-label">Email Address</label>
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                                Email Address
+                            </label>
                             <input
                                 type="email"
                                 id="email"
-                                placeholder="name@gmail.com"
+                                placeholder="Enter email address"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="form-input"
+                                className="border border-gray-300 rounded-lg py-2.5 px-4 text-sm w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="password" className="form-label">Password</label>
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                                Password
+                            </label>
                             <input
                                 type="password"
                                 id="password"
-                                placeholder="••••••••"
+                                placeholder="Enter password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="form-input"
+                                className="border border-gray-300 rounded-lg py-2.5 px-4 text-sm w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label htmlFor="nid" className="form-label">NID (10 Digits)</label>
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="nid" className="text-sm font-medium text-gray-700">
+                                NID (10 Digits)
+                            </label>
                             <input
                                 type="text"
                                 id="nid"
-                                placeholder="10 digits NID"
+                                placeholder="Enter 10 digit NID"
                                 value={nid}
                                 onChange={(e) => setNID(e.target.value)}
-                                className="form-input"
+                                maxLength={10}
+                                className="border border-gray-300 rounded-lg py-2.5 px-4 text-sm w-full focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
                             />
                         </div>
 
                         {error && (
-                            <div className="alert-error">
+                            <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-lg px-4 py-3">
                                 {error}
                             </div>
                         )}
 
                         {success && (
-                            <div className="alert-success">
+                            <div className="bg-green-50 border border-green-200 text-green-600 text-sm rounded-lg px-4 py-3">
                                 {success}
                             </div>
                         )}
 
-                        <div className="pt-4">
-                            <button type="submit" className="btn-primary">
-                                Create Officer Account
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg transition text-sm"
+                        >
+                            Create Officer Account
+                        </button>
                     </form>
                 </div>
 
-                <div className="mt-8 text-center">
+                <div className="mt-6 text-center">
                     <a href="/ZoneOfficer" className="text-sm text-blue-600 hover:underline">
                         ← Back to All Officers
                     </a>
@@ -174,114 +176,6 @@ export default function ZoneOfficerLogInForm() {
             </main>
 
             <Footer />
-            <style jsx>{`
-                .page-wrapper {
-                    display: flex;
-                    flex-direction: .page-container {
-                    max-width: 100px; /* Increased the width to 900px */
-                    margin: 2rem auto;
-                    padding: 2rem;
-                    background-color: white;
-                    border-radius: 1rem;
-                    box-shadow: 0 4px 10px rgba(141, 24, 24, 0.71);
-                };
-
-                    min-height: 100vh;
-                    background: linear-gradient(to bottom right, #fbf5f5ff, #c5fbd7ff,   #c8f5d6ff);
-                }
-
-                .page-container {
-                    max-width: 900px; /* Increased the width to 900px */
-                    margin: 2rem auto;
-                    padding: 2rem;
-                    background-color: white;
-                    border-radius: 1rem;
-                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                }
-
-                .page-title {
-                    font-size: 2rem;
-                    font-weight: 600;
-                    color: #2d3748;
-                }
-
-                .page-subtitle {
-                    color: #4a5568;
-                    font-size: 1rem;
-                    margin-top: 0.5rem;
-                }
-
-                .form {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 1.5rem;
-                }
-
-                .form-group {
-                    display: flex;
-                    flex-direction: column;
-                }
-
-                .form-label {
-                    font-size: 1rem;
-                    font-weight: 600;
-                    margin-bottom: 0.5rem;
-                    color: #2d3748;
-                }
-
-                .form-input {
-                    padding: 0.75rem;
-                    font-size: 1rem;
-                    border: 1px solid #e2e8f0;
-                    border-radius: 0.5rem;
-                    background-color: #f7fafc;
-                    color: #2d3748;
-                    outline: none;
-                    transition: all 0.3s ease;
-                }
-
-                .alert-error {
-                    background-color: #fff4f4;
-                    color: #e53e3e;
-                    border: 1px solid #e53e3e;
-                    padding: 1rem;
-                    border-radius: 0.5rem;
-                    font-size: 0.875rem;
-                }
-
-                .alert-success {
-                    background-color: #f0fdf4;
-                    color: #38a169;
-                    border: 1px solid #38a169;
-                    padding: 1rem;
-                    border-radius: 0.5rem;
-                    font-size: 0.875rem;
-                }
-
-                .btn-primary {
-                    padding: 0.75rem;
-                    font-size: 1rem;
-                    background-color: #38a169;
-                    color: #fff;
-                    border-radius: 0.5rem;
-                    border: none;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-                    width: 100%;
-                }
-
-                .btn-primary:hover {
-                    background-color: #2f855a;
-                }
-
-                .text-blue-600 {
-                    color: #3182ce;
-                }
-
-                .text-blue-600:hover {
-                    text-decoration: underline;
-                }
-            `}</style>
         </div>
     );
 }

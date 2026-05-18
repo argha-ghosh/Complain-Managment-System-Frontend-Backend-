@@ -3,7 +3,7 @@
 import z from "zod";
 import { useState, SyntheticEvent } from "react";
 import Header from "../../../components/header";
-import Footer from "@/components/footer";   
+import Footer from "@/components/footer";
 import axios from "axios";
 
 const UpdateZoneOfficerSchema = z.object({
@@ -94,86 +94,87 @@ export default function EditZoneOfficer() {
 
     return (
         <>
-            {<Header props={{ page: "Edit Zone Officer" }} />}
+            <div className="min-h-screen bg-gradient-to-br from-[#fbf5f5] via-[#c5fbd7] to-[#c8f5d6]">
+                {/* {<Header props={{ page: "Edit Zone Officer" }} />} */}
 
-            <h1>Edit Zone Officer</h1>
+                <h1>Edit Zone Officer</h1>
 
-            {/* Step 1 — Search Officer by ID */}
-            <form onSubmit={handleFetch}>
-                <div>
-                    <label htmlFor="searchId">Enter Officer ID:</label>
-                    <input
-                        type="number"
-                        id="searchId"
-                        value={searchId}
-                        onChange={(e) => setSearchId(Number(e.target.value))}
-                        className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                </div>
-                <button type="submit">Search</button>
-            </form>
-
-            {/* Step 2 — Edit Form (only shows after search) */}
-            {fetched && (
-                <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
-                    <h2>Editing Officer ID: {searchId}</h2>
-
+                {/* Step 1 — Search Officer by ID */}
+                <form onSubmit={handleFetch}>
                     <div>
-                        <label htmlFor="name">Name:</label>
+                        <label htmlFor="searchId">Enter Officer ID:</label>
                         <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            type="number"
+                            id="searchId"
+                            value={searchId}
+                            onChange={(e) => setSearchId(Number(e.target.value))}
                             className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                     </div>
-
-                    <div>
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="password">New Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter new password"
-                            className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="nid">NID:</label>
-                        <input
-                            type="text"
-                            id="nid"
-                            value={nid}
-                            onChange={(e) => setNID(e.target.value)}
-                            maxLength={10}
-                            className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        />
-                    </div>
-
-                    {error && <p style={{ color: "red" }}>{error}</p>}
-                    {success && <p style={{ color: "green" }}>{success}</p>}
-
-                    <button type="submit">Update</button>
+                    <button type="submit">Search</button>
                 </form>
-            )}
 
-            {error && !fetched && <p style={{ color: "red" }}>{error}</p>}
+                {/* Step 2 — Edit Form (only shows after search) */}
+                {fetched && (
+                    <form onSubmit={handleSubmit} style={{ marginTop: "20px" }}>
+                        <h2>Editing Officer ID: {searchId}</h2>
 
+                        <div>
+                            <label htmlFor="name">Name:</label>
+                            <input
+                                type="text"
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="email">Email:</label>
+                            <input
+                                type="email"
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="password">New Password:</label>
+                            <input
+                                type="password"
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter new password"
+                                className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="nid">NID:</label>
+                            <input
+                                type="text"
+                                id="nid"
+                                value={nid}
+                                onChange={(e) => setNID(e.target.value)}
+                                maxLength={10}
+                                className="border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        {error && <p style={{ color: "red" }}>{error}</p>}
+                        {success && <p style={{ color: "green" }}>{success}</p>}
+
+                        <button type="submit">Update</button>
+                    </form>
+                )}
+
+                {error && !fetched && <p style={{ color: "red" }}>{error}</p>}
+            </div>
             <Footer />
-        </> 
+        </>
     );
 }

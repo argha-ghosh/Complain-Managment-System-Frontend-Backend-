@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Header from "../../../../components/header";
-import Footer from "@/components/footer";   
+import Footer from "@/components/footer";
 import axios from "axios";
 
 export default function Complaints() {
@@ -60,6 +60,9 @@ export default function Complaints() {
             .then((response) => {
                 console.log(response);
                 setPatchSuccess(`Complaint ID ${complaintId} status updated to "${status}" successfully!`);
+                axios.get(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/officer/${officerId}/complaints`)
+                    .then((res) => setJsonData(res.data))
+                    .catch((err) => console.error(err));
             })
             .catch((error) => {
                 console.error(error);
@@ -84,6 +87,7 @@ export default function Complaints() {
                 console.error(error);
                 setDeleteError("Failed to delete complaint. Please try again.");
             });
+        window.location.href = "/ZoneOfficer/Complaint/EditComplain";
     }
 
     const printArray = (jsonData: any) => {
@@ -137,48 +141,49 @@ export default function Complaints() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-green-100">
-            <div className="text-center mb-6 pt-10">
-                <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-yellow-300 text-green-600 text-3xl mb-4">
-                    🌿
-                </div>
-                <h1 className="text-5xl font-extrabold text-gray-800">Complaints</h1>
-            </div>
-
-            {/* GET — Fetch Complaints by Officer ID */}
-            <form onSubmit={fetchComplaints} className="flex justify-center mb-6">
-                <div className="flex items-center space-x-4">
-                    <label htmlFor="officerId" className="text-lg">Zone Officer ID:</label>
-                    <input
-                        type="number"
-                        id="officerId"
-                        value={officerId}
-                        onChange={(e) => setOfficerId(Number(e.target.value))}
-                        className="input-field border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {fetchError && <p className="error-message text-red-500">{fetchError}</p>}
-                    <button type="submit" className="fetch-button bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-all">
-                        Get Complaints
-                    </button>
-                </div>
-            </form>
-
-            {/* PATCH / DELETE feedback messages */}
-            {patchSuccess && <p className="text-center text-green-600">{patchSuccess}</p>}
-            {patchError && <p className="text-center text-red-600">{patchError}</p>}
-            {deleteSuccess && <p className="text-center text-green-600">{deleteSuccess}</p>}
-            {deleteError && <p className="text-center text-red-600">{deleteError}</p>}
-
-            {/* Display Complaints */}
-            <div className="max-w-3xl mx-auto px-4 mt-6 pb-10">
-                {jsonData != null && (
-                    <div>
-                        {Array.isArray(jsonData) ? printArray(jsonData) : printArray([jsonData])}
+        <>
+            <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-green-100">
+                <div className="text-center mb-6 pt-10">
+                    <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-yellow-300 text-green-600 text-3xl mb-4">
+                        🌿
                     </div>
-                )}
-            </div>
+                    <h1 className="text-5xl font-extrabold text-gray-800">Complaints</h1>
+                </div>
 
+                {/* GET — Fetch Complaints by Officer ID */}
+                <form onSubmit={fetchComplaints} className="flex justify-center mb-6">
+                    <div className="flex items-center space-x-4">
+                        <label htmlFor="officerId" className="text-lg">Zone Officer ID:</label>
+                        <input
+                            type="number"
+                            id="officerId"
+                            value={officerId}
+                            onChange={(e) => setOfficerId(Number(e.target.value))}
+                            className="input-field border border-gray-300 rounded py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        {fetchError && <p className="error-message text-red-500">{fetchError}</p>}
+                        <button type="submit" className="fetch-button bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition-all">
+                            Get Complaints
+                        </button>
+                    </div>
+                </form>
+
+                {/* PATCH / DELETE feedback messages */}
+                {patchSuccess && <p className="text-center text-green-600">{patchSuccess}</p>}
+                {patchError && <p className="text-center text-red-600">{patchError}</p>}
+                {deleteSuccess && <p className="text-center text-green-600">{deleteSuccess}</p>}
+                {deleteError && <p className="text-center text-red-600">{deleteError}</p>}
+
+                {/* Display Complaints */}
+                <div className="max-w-3xl mx-auto px-4 mt-6 pb-10">
+                    {jsonData != null && (
+                        <div>
+                            {Array.isArray(jsonData) ? printArray(jsonData) : printArray([jsonData])}
+                        </div>
+                    )}
+                </div>
+            </div>
             <Footer />
-        </div>
+        </>
     );
 }

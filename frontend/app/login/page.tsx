@@ -49,7 +49,7 @@ export default function LoginPage() {
                 // Save to cookie (for middleware page protection)
                 document.cookie = `token=${token}; path=/; max-age=86400`;
 
-                window.location.href = "/";
+                window.location.href = "/ZoneOfficer/Dashboard";
             })
             .catch((error) => {
                 console.error(error);

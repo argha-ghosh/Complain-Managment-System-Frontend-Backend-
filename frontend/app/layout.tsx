@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import NavbarClient from "@/components/NavbarClient";
+import LandingNavbar from "@/components/NavbarClient";
 import PusherNotification from "@/components/PusherNotification";
 
 const geistSans = Geist({
@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zone Officer Portal",
+  title: "Dhaka Road & Drainage Issue Reporting System",
   description: "City complaint management system",
 };
 
@@ -31,7 +31,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900">
 
-        <NavbarClient />
+        <LandingNavbar />
 
         <PusherNotification />
 
