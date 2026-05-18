@@ -58,6 +58,7 @@ export default function ZoneOfficerHomeForm() {
             return;
         }
 
+        // Axios Call — POST /zone-officer/create-complaint
         setLoading(true);
         axios
             .post(
@@ -82,13 +83,10 @@ export default function ZoneOfficerHomeForm() {
 
     return (
         <>
-            {/* <Header props={{ page: "Create Complaint" }} /> */}
 
-            {/* Page background */}
             <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-green-100 py-10 px-4">
                 <div className="max-w-2xl mx-auto">
 
-                    {/* Page heading */}
                     <div className="mb-8 text-center">
                         <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 text-green-600 text-2xl mb-4">
                             🌿
@@ -101,7 +99,6 @@ export default function ZoneOfficerHomeForm() {
                         </p>
                     </div>
 
-                    {/* Form card */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
 
                         <form onSubmit={handleSubmit} className="space-y-5">

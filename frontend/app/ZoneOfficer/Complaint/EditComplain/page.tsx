@@ -15,7 +15,7 @@ export default function Complaints() {
     const [deleteSuccess, setDeleteSuccess] = useState<string>("");
     const [deleteError, setDeleteError] = useState<string>("");
 
-    // Axios Call #1 — GET /zone-officer/officer/:officerId/complaints
+    // Axios Call — GET /zone-officer/officer/:officerId/complaints
     function fetchComplaints(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
         setFetchError("");
@@ -43,7 +43,7 @@ export default function Complaints() {
             });
     }
 
-    // Axios Call #2 — PATCH /zone-officer/update-complaint/:id
+    // Axios Call — PATCH /zone-officer/update-complaint/:id
     function updateStatus(complaintId: number) {
         setPatchSuccess("");
         setPatchError("");
@@ -67,7 +67,7 @@ export default function Complaints() {
             });
     }
 
-    // Axios Call #3 — DELETE /zone-officer/delete-complaint/:id
+    // Axios Call — DELETE /zone-officer/delete-complaint/:id
     function deleteComplaint(complaintId: number) {
         setDeleteSuccess("");
         setDeleteError("");
@@ -123,7 +123,6 @@ export default function Complaints() {
                         </button>
                     </div>
 
-                    {/* ✅ CHANGED — Delete button now visible with red background */}
                     <div className="mt-4">
                         <button
                             onClick={() => deleteComplaint(item.complaintId)}
@@ -138,12 +137,7 @@ export default function Complaints() {
     };
 
     return (
-        // ✅ CHANGED — background color to green mixed with light gray
         <div className="min-h-screen bg-gradient-to-br from-gray-100 via-gray-50 to-green-100">
-
-            {/* <Header props={{ page: "Complaints" }} /> */}
-
-            {/* Emoji and Title Section */}
             <div className="text-center mb-6 pt-10">
                 <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-yellow-300 text-green-600 text-3xl mb-4">
                     🌿

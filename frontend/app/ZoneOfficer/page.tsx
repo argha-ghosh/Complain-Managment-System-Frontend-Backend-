@@ -5,7 +5,7 @@ async function getAllOfficers() {
     try {
         const res = await fetch(
             `${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/all`,
-            { cache: "no-store" }  // no-store = always fetch fresh (SSR)
+            { cache: "no-store" }  // SSR
         );
         if (!res.ok) throw new Error("Failed to fetch");
         return await res.json();
@@ -19,9 +19,7 @@ export default async function AllOfficers() {
 
     return (
         <>
-            {/* Gradient background applied to the whole page */}
             <div className="min-h-screen bg-gradient-to-br from-[#fbf5f5] via-[#c5fbd7] to-[#c8f5d6]">
-                {/* <Header props={{ page: "All Officers" }} /> */}
 
                 <main className="max-w-4xl mx-auto px-4 py-8">
                     <h1 className="text-2xl font-bold mb-6 text-gray-800">

@@ -31,13 +31,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-gray-50 text-gray-900">
 
-        {/* ── Navbar ── */}
         <NavbarClient />
 
-        {/* ✅ Pusher Beams — runs in background, registers for notifications */}
         <PusherNotification />
 
-        {/* ── Page content ── */}
         <main className="flex-1">
           {children}
         </main>

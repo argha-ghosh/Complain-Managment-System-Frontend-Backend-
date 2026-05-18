@@ -29,11 +29,7 @@ export default async function OfficerDetail({
 
     return (
         <>
-            {/* <Header props={{ page: "Officer Detail" }} /> */}
             <main className="max-w-2xl mx-auto px-4 py-10">
-                <a href="/ZoneOfficer" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
-                    ← Back to All Officers
-                </a>
 
                 <div className="border border-gray-200 rounded-xl bg-white shadow-sm p-6">
                     <div className="flex items-center gap-4 mb-6">
@@ -60,7 +56,13 @@ export default async function OfficerDetail({
 
                         <DeleteOfficerButton id={id} />
                     </div>
-                </div>
+                </div>  
+
+                <br></br>
+                
+                <a href="/ZoneOfficer" className="text-sm text-blue-600 hover:underline mb-6 inline-block">
+                    ← Back to All Officers
+                </a>
             </main>
         </>
     );

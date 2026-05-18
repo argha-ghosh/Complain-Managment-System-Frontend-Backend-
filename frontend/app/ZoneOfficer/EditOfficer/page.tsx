@@ -37,7 +37,7 @@ export default function EditZoneOfficer() {
     const [success, setSuccess] = useState<string>("");
     const [fetched, setFetched] = useState<boolean>(false);
 
-    // Axios Call #7 — GET /zone-officer/:id
+    // Axios Call — GET /zone-officer/:id
     function handleFetch(e: SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
         setError("");
@@ -65,7 +65,7 @@ export default function EditZoneOfficer() {
             });
     }
 
-    // Axios Call #8 — PUT /zone-officer/update/:id
+    // Axios Call — PUT /zone-officer/update/:id
     const handleSubmit = (e: SyntheticEvent<HTMLFormElement>): void => {
         e.preventDefault();
         setError("");

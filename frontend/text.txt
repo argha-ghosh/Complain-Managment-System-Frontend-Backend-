@@ -1,4 +1,2 @@
-Difference between React Js and Next Js
-What is Zod library, component, hook
-CSR or SSR
-Difference between CSR and SSR
+Why we use middleware? How it works?
+- Middleware is a function that runs before the page loads. It sits between the request and the response.

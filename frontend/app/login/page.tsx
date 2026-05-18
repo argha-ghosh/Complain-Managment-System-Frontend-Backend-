@@ -69,7 +69,7 @@ export default function LoginPage() {
                     <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-600 text-white text-2xl mb-4">
                         🌿
                     </div>
-                    <h1 className="text-2xl font-bold text-gray-800">Welcome Back</h1>
+                    <h1 className="text-2xl font-bold text-gray-1000">Welcome Back</h1>
                     <p className="text-gray-500 text-sm mt-1">Sign in to your ZonePortal account</p>
                 </div>
 

@@ -1,7 +1,14 @@
 export default function Footer() {
-    return (
-        <footer className="border-t border-gray-200 bg-white text-center py-4 text-xs text-gray-400">
-            © {new Date().getFullYear()} ZonePortal · City Complaint Management
-        </footer>
-    );
-}``
+  return (
+    <footer className="bg-gray-900 text-white text-center py-8">
+     
+      <h2 className="text-2xl font-semibold">
+        Smart Dhaka, Clean Dhaka
+      </h2>
+ 
+      <p className="mt-3 text-gray-400">
+        © 2026 Dhaka Road & Drainage Issue Reporting System
+      </p>
+    </footer>
+  );
+}
