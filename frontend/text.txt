@@ -1,2 +1,1 @@
-Why we use middleware? How it works?
-- Middleware is a function that runs before the page loads. It sits between the request and the response.
+

@@ -1,14 +1,15 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
+import axios from "axios";
+
 async function getAllOfficers() {
     try {
-        const res = await fetch(
+        const res = await axios.get(
             `${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/all`,
-            { cache: "no-store" }  // SSR
+            { headers: { "Cache-Control": "no-store" } } // SSR
         );
-        if (!res.ok) throw new Error("Failed to fetch");
-        return await res.json();
+        return res.data; // Axios automatically parses JSON
     } catch {
         return null;
     }

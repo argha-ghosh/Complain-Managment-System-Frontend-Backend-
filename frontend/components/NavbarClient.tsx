@@ -178,7 +178,7 @@ export default function LandingNavbar() {
                         <li>
                             <Link href="/login">
                                 <button className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-5 py-2 rounded-lg transition">
-                                    Login
+                                    Log In
                                 </button>
                             </Link>
                         </li>

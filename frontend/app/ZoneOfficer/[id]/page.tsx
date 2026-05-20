@@ -1,15 +1,15 @@
 import Header from "@/components/header";
 import { notFound } from "next/navigation";
 import DeleteOfficerButton from "@/components/DeleteOfficerButton";
+import axios from "axios";
 
 async function getOfficer(id: string) {
     try {
-        const res = await fetch(
+        const res = await axios.get(
             `${process.env.NEXT_PUBLIC_API_ENDPOINT}/zone-officer/${id}`,
-            { cache: "no-store" }
+            { headers: { "Cache-Control": "no-store" } }
         );
-        if (!res.ok) return null;
-        return await res.json();
+        return res.data;
     } catch {
         return null;
     }
