@@ -3,11 +3,34 @@ import { ZOfficerService } from './ZOfficer.service';
 import { CreateZoneOfficerDto, UpdateZoneOfficerDto, CreateComplaintDto, UpdateComplainDto, CreateOfficerProfileDto } from './ZOfficer.dto';
 import { diskStorage, MulterError } from "multer";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { OtpService } from "./otp.service";
 
 @Controller('zone-officer')
 export class ZOfficerController {
-  constructor(private readonly ZOfficerService: ZOfficerService) { }
+  constructor(
+    private readonly ZOfficerService: ZOfficerService,
+    private readonly otpService: OtpService,
+  ) { }
 
+  // Send OTP 
+  @Post('send-otp')
+  async sendOtp(@Body('email') email: string) {
+    await this.otpService.sendOtp(email);
+    return { message: `An OTP is sent to ${email}` };
+  }
+
+  // Verify OTP Endpoint for testing
+  @Post('verify-otp')
+  async verifyOtp(@Body() body: { email: string; otp: string }) {
+    const { email, otp } = body;
+    const isValid = this.otpService.verifyOtp(email, otp);
+    if (isValid) {
+      return { message: 'OTP verified successfully' };
+    } else {
+      throw new HttpException('Invalid or expired OTP', HttpStatus.BAD_REQUEST);
+    }
+  }
+  
   //Zone Officer
   //Creating a new Zone Officer
   @Post('create-ZoneOfficer')
