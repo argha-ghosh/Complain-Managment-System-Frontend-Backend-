@@ -11,7 +11,7 @@ export class AuthService {
   constructor(
     private readonly zOfficerService: ZOfficerService,
     private readonly jwtService: JwtService,
-  ) {}
+  ) { }
 
   async login(dto: LoginDto) {
     // Find user by email
