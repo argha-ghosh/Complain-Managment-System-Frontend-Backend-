@@ -1,4 +1,3 @@
-
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
@@ -11,18 +10,19 @@ export class AuthService {
   constructor(
     private readonly zOfficerService: ZOfficerService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   async login(dto: LoginDto) {
-    // Find user by email
     const user: ZOfficerEntity | null = await this.zOfficerService.findByEmail(dto.email);
     if (!user || !user.password) {
       throw new UnauthorizedException('Invalid email or password');
     }
+
     const stored = user.password;
     let match = await bcrypt.compare(dto.password, stored);
+
     if (!match && !stored.startsWith('$2')) {
-      // Legacy row: plain-text password — verify once, then store bcrypt hash
+      // Legacy plain-text password — verify once, then upgrade to bcrypt hash
       if (stored === dto.password) {
         match = true;
         const hashed = await bcrypt.hash(dto.password, 10);
@@ -31,9 +31,11 @@ export class AuthService {
         }
       }
     }
+
     if (!match) {
       throw new UnauthorizedException('Invalid email or password');
     }
+
     const payload = { sub: user.id, email: user.email };
     const access_token = await this.jwtService.signAsync(payload);
     return {
@@ -47,7 +49,6 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    // Remove password from returned object
     const { password, ...safe } = user;
     return safe;
   }

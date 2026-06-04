@@ -1,6 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from 'typeorm';
+import { ComplaintEntity } from './complaint.entity';
+import { OfficerProfileEntity } from './officer-profile.entity';
 
-@Entity("zone_officer")
+@Entity('zone_officer')
 export class ZOfficerEntity {
   @PrimaryGeneratedColumn()
   id?: number;
@@ -17,57 +19,11 @@ export class ZOfficerEntity {
   @Column()
   nid?: string;
 
-  // One-to-Many: ZOfficer has many Complaints
-  @OneToMany(() => ComplaintEntity, (complaint) => complaint.zoneOfficer, { cascade: true })
+  @OneToMany(() => ComplaintEntity, (complaint) => complaint.zoneOfficer, {
+    cascade: true,
+  })
   complaints?: ComplaintEntity[];
+
+  @OneToOne(() => OfficerProfileEntity, (profile) => profile.zoneOfficer)
   profile?: OfficerProfileEntity;
-}
-
-@Entity('officer_profile')
-export class OfficerProfileEntity {
-  @PrimaryGeneratedColumn()
-  profileId?: number;
-
-  @Column()
-  zoneOfficerId?: number;
-
-  @Column()
-  department?: string;
-
-  @Column()
-  experienceYears?: number;
-
-  @Column({ type: 'date' })
-  joinDate?: Date;
-
-  // One-to-One relationship with ZOfficer
-  @OneToOne(() => ZOfficerEntity)
-  @JoinColumn({ name: 'zoneOfficerId' })
-  zoneOfficer?: ZOfficerEntity;
-}
-
-@Entity('complaint')
-export class ComplaintEntity {
-  @PrimaryGeneratedColumn()
-  complaintId?: number;
-
-  @Column({ nullable: true })
-  zoneOfficerId?: number;
-
-  @Column()
-  zoneName?: string;
-
-  @Column()
-  areaName?: string;
-
-  @Column()
-  description?: string;
-
-  @Column()
-  status?: string;
-
-  // Many-to-One: Complaint belongs to one ZOfficer
-  @ManyToOne(() => ZOfficerEntity, (zoneOfficer) => zoneOfficer.complaints)
-  @JoinColumn({ name: 'zoneOfficerId' })
-  zoneOfficer?: ZOfficerEntity;
 }

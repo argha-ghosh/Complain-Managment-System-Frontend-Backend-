@@ -1,15 +1,12 @@
-import { IsNotEmpty, IsString, Matches, IsNumber } from 'class-validator';
-import { IsOptional } from 'class-validator';
+import { IsNotEmpty, IsString, Matches, IsNumber, IsOptional } from 'class-validator';
 
-//Zone Officer
+// Zone Officer
 export class CreateZoneOfficerDto {
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z\s]+$/, {
-    message: 'Name must contain only letters and spaces',
-  })
-  
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'Name must contain only letters and spaces' })
   name?: string;
+
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-zA-Z0-9]+@gmail\.com$/, {
@@ -28,10 +25,9 @@ export class CreateZoneOfficerDto {
 
 export class UpdateZoneOfficerDto {
   @IsString()
-  @Matches(/^[a-zA-Z\s]+$/, {
-    message: 'Name must contain only letters and spaces',
-  })
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'Name must contain only letters and spaces' })
   name?: string;
+
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-zA-Z0-9]+@gmail\.com$/, {
@@ -47,7 +43,7 @@ export class UpdateZoneOfficerDto {
   nid?: number;
 }
 
-//Complaint
+// Complaint
 export class CreateComplaintDto {
   @IsOptional()
   @IsNumber()
@@ -55,23 +51,18 @@ export class CreateComplaintDto {
 
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z\s]+$/, {
-    message: 'Zone name must contain only letters and spaces',
-  })
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'Zone name must contain only letters and spaces' })
   zoneName?: string;
 
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z\s]+$/, {
-    message: 'Area name must contain only letters and spaces',
-  })
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'Area name must contain only letters and spaces' })
   areaName?: string;
 
   @IsNotEmpty()
   @IsString()
   @Matches(/^[a-zA-Z0-9\s.,!?]+$/, {
-    message:
-      'Description can only contain letters, numbers, spaces and basic punctuation',
+    message: 'Description can only contain letters, numbers, spaces and basic punctuation',
   })
   description?: string;
 
@@ -96,9 +87,7 @@ export class UpdateComplainDto {
 export class CreateOfficerProfileDto {
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[a-zA-Z\s]+$/, {
-    message: 'Department must contain only letters and spaces',
-  })
+  @Matches(/^[a-zA-Z\s]+$/, { message: 'Department must contain only letters and spaces' })
   department?: string;
 
   @IsNotEmpty()
