@@ -85,17 +85,17 @@ export class AdminService {
 
   async deleteOfficer(id: number) {
     const officer = await this.zoneOfficerRepository.delete(id);
-    await pusher.trigger('admin-channel', 'officer-delete', {
-      message: 'Officer Deleted Successfully.',
-    });
+    // await pusher.trigger('admin-channel', 'officer-delete', {
+    //   message: 'Officer Deleted Successfully.',
+    // });
     return officer;
   }
 
   async updateOfficer(id: number, data: any) {
     const officer = await this.zoneOfficerRepository.update(id, data);
-    await pusher.trigger('admin-channel', 'officer-update', {
-      message: 'You successfully updated officer account',
-    });
+    // await pusher.trigger('admin-channel', 'officer-update', {
+    //   message: 'You successfully updated officer account',
+    // });
     return officer;
   }
 
@@ -112,7 +112,7 @@ export class AdminService {
     if (!match) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    const payload = { id: admin.id, email: admin.email };
+    const payload = { sub: admin.id, email: admin.email };
     const token = this.jwtService.sign(payload);
     return {
       message: 'Login Successful',

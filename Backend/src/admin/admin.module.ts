@@ -13,18 +13,16 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
   imports: [
+    ConfigModule,
     PassportModule,
     JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: (config: ConfigService) => {
-        const expiresIn = config.get<string>('ADMIN_JWT_EXPIRES', '1h') as any;
-        return {
-          secret: config.get<string>('ADMIN_JWT_SECRET', 'DhakaCityCorporationKey'),
-          signOptions: { expiresIn },
-        };
-      },
-      inject: [ConfigService],
-    }),
+  imports: [ConfigModule],
+  useFactory: (config: ConfigService) => ({
+    secret: config.get<string>('JWT_SECRET', 'apwd-dev-jwt-secret'),
+    signOptions: { expiresIn: '1h' },
+  }),
+  inject: [ConfigService],
+}),
 MailerModule.forRoot({
   transport: {
     host: 'smtp.gmail.com',
