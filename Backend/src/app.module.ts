@@ -17,6 +17,12 @@ import { ZoneOfficerEntity } from './admin/zoneOfficer.entity';
 import { OfficerProfileEntity } from './Zone Officer/officer-profile.entity';
 import { ComplaintEntity } from './Zone Officer/complaint.entity';
 
+//CITIZEN PART MODULES
+import { CitizenModule } from './citizen/citizen.module';
+import { CitizenEntity } from './citizen/citizen.entity';
+import { CitizenComplaintEntity } from './citizen/citizen-complaint.entity';
+import { FeedbackEntity } from './citizen/feedback.entity';
+
 @Module({
   imports: [
     // Load .env globally
@@ -37,6 +43,9 @@ TypeOrmModule.forRoot({
     AdminEntity,
     ProfileEntity,
     ZoneOfficerEntity,
+    CitizenEntity,
+    CitizenComplaintEntity,
+    FeedbackEntity,
   ],
   synchronize: true,
 }),
@@ -47,6 +56,9 @@ TypeOrmModule.forRoot({
 
     // Admin part
     AdminModule,
+
+    // Citizen part
+    CitizenModule,
   ],
   controllers: [AppController],
   providers: [AppService],
