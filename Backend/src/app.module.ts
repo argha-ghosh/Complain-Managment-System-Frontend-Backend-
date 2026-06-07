@@ -22,6 +22,11 @@ import { CitizenModule } from './citizen/citizen.module';
 import { CitizenEntity } from './citizen/citizen.entity';
 import { CitizenComplaintEntity } from './citizen/citizen-complaint.entity';
 import { FeedbackEntity } from './citizen/feedback.entity';
+import { FieldEngineerEntity } from './field-engineer/field-engineer.entity';
+import { FieldEngineerModule } from './field-engineer/field-engineer.module';
+import { EngineerAssignmentEntity } from './field-engineer/engineer-assignment.entity';
+import { RepairPhotoEntity } from './field-engineer/repair-photo.entity';
+import { EngineerCommentEntity } from './field-engineer/engineer-comment.entity';
 
 @Module({
   imports: [
@@ -29,26 +34,30 @@ import { FeedbackEntity } from './citizen/feedback.entity';
     ConfigModule.forRoot({ isGlobal: true }),
 
     // Single TypeORM connection — all entities registered here
-TypeOrmModule.forRoot({
-  type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  entities: [
-    ZOfficerEntity,
-    ComplaintEntity,
-    OfficerProfileEntity,
-    AdminEntity,
-    ProfileEntity,
-    ZoneOfficerEntity,
-    CitizenEntity,
-    CitizenComplaintEntity,
-    FeedbackEntity,
-  ],
-  synchronize: true,
-}),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.DB_HOST || 'localhost',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      username: process.env.DB_USERNAME || 'postgres',
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [
+        ZOfficerEntity,
+        ComplaintEntity,
+        OfficerProfileEntity,
+        AdminEntity,
+        ProfileEntity,
+        ZoneOfficerEntity,
+        CitizenEntity,
+        CitizenComplaintEntity,
+        FeedbackEntity,
+        FieldEngineerEntity,
+        EngineerAssignmentEntity,
+        RepairPhotoEntity,
+        EngineerCommentEntity,
+      ],
+      synchronize: true,
+    }),
 
     // Zone Officer part
     AuthModule,
@@ -59,8 +68,11 @@ TypeOrmModule.forRoot({
 
     // Citizen part
     CitizenModule,
+
+    // Field Engineer part
+    FieldEngineerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
