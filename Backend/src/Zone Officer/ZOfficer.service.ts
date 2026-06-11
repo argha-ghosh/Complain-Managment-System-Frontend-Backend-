@@ -94,32 +94,38 @@ export class ZOfficerService {
   // Create Complaint
   async createComplaint(
     CreateComplaintDto: CreateComplaintDto & { zoneOfficerId?: number },
-  ): Promise<ComplaintEntity> {
+): Promise<ComplaintEntity> {
     const complaint = this.complaintRepository.create(CreateComplaintDto);
 
     if (CreateComplaintDto.zoneOfficerId) {
-      const zoneOfficer = await this.zOfficerRepository.findOneBy({
-        id: CreateComplaintDto.zoneOfficerId,
-      });
-      if (!zoneOfficer) {
-        throw new HttpException(
-          `Zone Officer with ID ${CreateComplaintDto.zoneOfficerId} not found`,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-      complaint.zoneOfficer = zoneOfficer;
-      complaint.zoneOfficerId = CreateComplaintDto.zoneOfficerId;
+        const zoneOfficer = await this.zOfficerRepository.findOneBy({
+            id: CreateComplaintDto.zoneOfficerId,
+        });
+        if (!zoneOfficer) {
+            throw new HttpException(
+                `Zone Officer with ID ${CreateComplaintDto.zoneOfficerId} not found`,
+                HttpStatus.NOT_FOUND,
+            );
+        }
+        complaint.zoneOfficer = zoneOfficer;
+        complaint.zoneOfficerId = CreateComplaintDto.zoneOfficerId;
     }
 
     const saved = (await this.complaintRepository.save(complaint)) as ComplaintEntity;
 
+    console.log('🔔 Calling notifyComplaintCreated...');  // ← add koro
+    console.log('Zone:', CreateComplaintDto.zoneName);     // ← add koro
+    console.log('Area:', CreateComplaintDto.areaName);     // ← add koro
+
     await notifyComplaintCreated(
-      CreateComplaintDto.zoneName || 'Unknown Zone',
-      CreateComplaintDto.areaName || 'Unknown Area',
+        CreateComplaintDto.zoneName || 'Unknown Zone',
+        CreateComplaintDto.areaName || 'Unknown Area',
     );
 
+    console.log('🔔 notifyComplaintCreated finished');     // ← add koro
+
     return saved;
-  }
+}
 
   // Update Complaint Status
   async updateComplaintStatus(id: number, status: string): Promise<object> {
