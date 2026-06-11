@@ -211,7 +211,7 @@ export default function ZoneOfficerLogInForm() {
                                 <div className="flex gap-2">
                                     <input
                                         type="text"
-                                        placeholder="Enter your 6 digit OTP"
+                                        placeholder="Enter your OTP"
                                         value={otp}
                                         onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
                                         maxLength={6}
