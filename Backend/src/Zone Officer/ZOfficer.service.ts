@@ -2,11 +2,11 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { CreateZoneOfficerDto, UpdateZoneOfficerDto, CreateComplaintDto, CreateOfficerProfileDto } from './ZOfficer.dto';
-import { ZOfficerEntity } from './ZOfficer.entity';
-import { OfficerProfileEntity } from './officer-profile.entity';
+import { CreateZoneOfficerDto, UpdateZoneOfficerDto, CreateComplaintDto, CreateOfficerProfileDto } from './DTO/ZOfficer.dto';
+import { ZOfficerEntity } from './Entity/ZOfficer.entity';
+import { OfficerProfileEntity } from './Entity/officer-profile.entity';
 import { notifyComplaintCreated } from '../pusher/pusher.service';
-import { ComplaintEntity } from './complaint.entity';
+import { ComplaintEntity } from './Entity/complaint.entity';
 
 @Injectable()
 export class ZOfficerService {
@@ -19,6 +19,11 @@ export class ZOfficerService {
     @InjectRepository(OfficerProfileEntity)
     private readonly officerProfileRepository: Repository<OfficerProfileEntity>,
   ) {}
+
+  private sanitizeOfficer(officer: ZOfficerEntity): Partial<ZOfficerEntity> {
+    const { password, ...safeOfficer } = officer;
+    return safeOfficer;
+  }
 
   async findByEmail(email: string): Promise<ZOfficerEntity | null> {
     const normalized = email.trim().toLowerCase();
@@ -78,17 +83,18 @@ export class ZOfficerService {
   }
 
   // Get All Zone Officers
-  async findAll(): Promise<ZOfficerEntity[]> {
-    return await this.zOfficerRepository.find();
+  async findAll(): Promise<Partial<ZOfficerEntity>[]> {
+    const officers = await this.zOfficerRepository.find();
+    return officers.map((officer) => this.sanitizeOfficer(officer));
   }
 
   // Get Zone Officer by ID
-  async findOne(id: number): Promise<ZOfficerEntity> {
+  async findOne(id: number): Promise<Partial<ZOfficerEntity>> {
     const zoneOfficer = await this.zOfficerRepository.findOne({ where: { id } });
     if (!zoneOfficer) {
       throw new HttpException(`Zone Officer with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
-    return zoneOfficer;
+    return this.sanitizeOfficer(zoneOfficer);
   }
 
   // Create Complaint
@@ -113,16 +119,10 @@ export class ZOfficerService {
 
     const saved = (await this.complaintRepository.save(complaint)) as ComplaintEntity;
 
-    console.log('🔔 Calling notifyComplaintCreated...');  // ← add koro
-    console.log('Zone:', CreateComplaintDto.zoneName);     // ← add koro
-    console.log('Area:', CreateComplaintDto.areaName);     // ← add koro
-
     await notifyComplaintCreated(
         CreateComplaintDto.zoneName || 'Unknown Zone',
         CreateComplaintDto.areaName || 'Unknown Area',
     );
-
-    console.log('🔔 notifyComplaintCreated finished');     // ← add koro
 
     return saved;
 }

@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CitizenController } from './citizen.controller';
 import { CitizenService } from './citizen.service';
-import { CitizenEntity } from './citizen.entity';
-import { CitizenComplaintEntity } from './citizen-complaint.entity';
-import { FeedbackEntity } from './feedback.entity';
+import { CitizenEntity } from './Entity/citizen.entity';
+import { CitizenComplaintEntity } from './Entity/citizen-complaint.entity';
+import { FeedbackEntity } from './Entity/feedback.entity';
+import { CitizenAuthGuard } from './citizen-auth.guard';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { FeedbackEntity } from './feedback.entity';
     ]),
   ],
   controllers: [CitizenController],
-  providers: [CitizenService],
+  providers: [CitizenService, CitizenAuthGuard],
   exports: [CitizenService],
 })
 export class CitizenModule {}

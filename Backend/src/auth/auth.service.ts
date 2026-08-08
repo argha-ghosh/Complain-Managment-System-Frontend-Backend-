@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { ZOfficerService } from '../Zone Officer/ZOfficer.service';
-import { LoginDto } from './login.dto';
-import { ZOfficerEntity } from '../Zone Officer/ZOfficer.entity';
+import { LoginDto } from './DTO/login.dto';
+import { ZOfficerEntity } from '../Zone Officer/Entity/ZOfficer.entity';
 
 @Injectable()
 export class AuthService {

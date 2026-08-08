@@ -7,12 +7,11 @@ import {
   RegisterCitizenDto, LoginCitizenDto,
   CreateCitizenComplaintDto, UpdateComplaintStatusDto,
   CreateFeedbackDto,
-} from './citizen.dto';
-import { CitizenEntity } from './citizen.entity';
-import { CitizenComplaintEntity } from './citizen-complaint.entity';
-import { FeedbackEntity } from './feedback.entity';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
+} from './DTO/citizen.dto';
+import { CitizenEntity } from './Entity/citizen.entity';
+import { CitizenComplaintEntity } from './Entity/citizen-complaint.entity';
+import { FeedbackEntity } from './Entity/feedback.entity';
+import { requireEnvValue } from '../common/jwt-secret';
 
 
 @Injectable()
@@ -69,7 +68,7 @@ export class CitizenService {
 
     const token = jwt.sign(
       { id: citizen.id, email: citizen.email, role: 'citizen' },
-      JWT_SECRET,
+      requireEnvValue('JWT_SECRET'),
       { expiresIn: '7d' },
     );
 

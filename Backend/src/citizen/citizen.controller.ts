@@ -1,17 +1,19 @@
 import {
   Body, Controller, Delete, Get, Param, Patch, Post,
-  UseInterceptors, UsePipes, ValidationPipe,
+  UseGuards, UseInterceptors, UsePipes, ValidationPipe,
   UploadedFile, HttpException, HttpStatus, ParseIntPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
 import { diskStorage, MulterError } from 'multer';
 
 import { CitizenService } from './citizen.service';
+import { CitizenAuthGuard } from './citizen-auth.guard';
 import {
   RegisterCitizenDto, LoginCitizenDto,
   CreateCitizenComplaintDto, UpdateComplaintStatusDto,
   CreateFeedbackDto,
-} from './citizen.dto';
+} from './DTO/citizen.dto';
 
 @Controller('citizen')
 export class CitizenController {
@@ -40,6 +42,7 @@ export class CitizenController {
   // ────────────────────────────────────────────────────────────────────────────
 
   // GET /citizen/profile/:id
+  @UseGuards(CitizenAuthGuard)
   @Get('profile/:id')
   async getProfile(@Param('id', ParseIntPipe) id: number): Promise<object> {
     return await this.citizenService.getProfile(id);
@@ -51,6 +54,7 @@ export class CitizenController {
 
   // POST /citizen/complaint/submit
   // Form-data fields: corporation, zone, ward, title, description, citizenId (optional), image (optional file)
+  @UseGuards(CitizenAuthGuard)
   @Post('complaint/submit')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -99,6 +103,7 @@ export class CitizenController {
   // ────────────────────────────────────────────────────────────────────────────
 
   // GET /citizen/:citizenId/complaints
+  @UseGuards(CitizenAuthGuard)
   @Get(':citizenId/complaints')
   async getMyComplaints(@Param('citizenId', ParseIntPipe) citizenId: number): Promise<object> {
     return await this.citizenService.getMyComplaints(citizenId);
@@ -109,6 +114,7 @@ export class CitizenController {
   // ────────────────────────────────────────────────────────────────────────────
 
   // PATCH /citizen/complaint/status/:id
+  @UseGuards(AuthGuard('jwt'))
   @Patch('complaint/status/:id')
   @UsePipes(new ValidationPipe())
   async updateStatus(
@@ -123,6 +129,7 @@ export class CitizenController {
   // ────────────────────────────────────────────────────────────────────────────
 
   // DELETE /citizen/complaint/:id
+  @UseGuards(CitizenAuthGuard)
   @Delete('complaint/:id')
   async deleteComplaint(@Param('id', ParseIntPipe) id: number): Promise<object> {
     return await this.citizenService.deleteComplaint(id);
@@ -133,6 +140,7 @@ export class CitizenController {
   // ────────────────────────────────────────────────────────────────────────────
 
   // POST /citizen/feedback
+  @UseGuards(CitizenAuthGuard)
   @Post('feedback')
   @UsePipes(new ValidationPipe())
   async createFeedback(@Body() dto: CreateFeedbackDto): Promise<object> {
@@ -144,6 +152,7 @@ export class CitizenController {
   // ────────────────────────────────────────────────────────────────────────────
 
   // GET /citizen/feedback/complaint/:complaintId
+  @UseGuards(CitizenAuthGuard)
   @Get('feedback/complaint/:complaintId')
   async getFeedback(@Param('complaintId', ParseIntPipe) complaintId: number): Promise<object> {
     return await this.citizenService.getFeedbackByComplaint(complaintId);
@@ -161,6 +170,7 @@ export class CitizenController {
 
   // NOTE: Keep this generic :id route LAST to avoid intercepting named routes above
   // GET /citizen/:id
+  @UseGuards(CitizenAuthGuard)
   @Get(':id')
   async getCitizenById(@Param('id') id: string): Promise<object> {
     const parsedId = parseInt(id, 10);

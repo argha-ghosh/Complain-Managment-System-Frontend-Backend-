@@ -4,12 +4,12 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
-import { AdminEntity } from './admin.entity';
-import { ProfileEntity } from './profile.entity';
-import { ZoneOfficerEntity } from './zoneOfficer.entity';
+import { AdminEntity } from './Entity/admin.entity';
+import { ProfileEntity } from './Entity/profile.entity';
+import { ZoneOfficerEntity } from './Entity/zoneOfficer.entity';
+import { FieldEngineerEntity } from '../field-engineer/Entity/field-engineer.entity';
 import { AdminDTO } from './DTO/AdminDTO';
 import { UpdatePhoneDTO } from './DTO/UpdatePhoneDTO';
-import { pusher } from '../pusher/pusher.service';
 
 @Injectable()
 export class AdminService {
@@ -20,24 +20,44 @@ export class AdminService {
     private profileRepository: Repository<ProfileEntity>,
     @InjectRepository(ZoneOfficerEntity)
     private zoneOfficerRepository: Repository<ZoneOfficerEntity>,
+    @InjectRepository(FieldEngineerEntity)
+    private engineerRepository: Repository<FieldEngineerEntity>,
     private mailService: MailerService,
     private jwtService: JwtService,
   ) {}
 
-  getAllAdmins() {
-    return this.adminRepository.find();
+  private sanitizeAdmin(admin: AdminEntity | null): Partial<AdminEntity> | null {
+    if (!admin) return null;
+    const { password, ...safeAdmin } = admin;
+    return safeAdmin;
   }
 
-  getAdminById(id: number) {
-    return this.adminRepository.findOne({ where: { id } });
+  private sanitizeAdmins(admins: AdminEntity[]): Partial<AdminEntity>[] {
+    return admins.map((admin) => this.sanitizeAdmin(admin)!);
+  }
+
+  async getAllAdmins() {
+    const admins = await this.adminRepository.find();
+    return this.sanitizeAdmins(admins);
+  }
+
+  async getAdminById(id: number) {
+    const admin = await this.adminRepository.findOne({ where: { id } });
+    return this.sanitizeAdmin(admin);
   }
 
   getZoneOfficer(id: number) {
-    return this.adminRepository.findOneBy({ id });
+    return this.zoneOfficerRepository.findOne({
+      where: { id },
+      relations: ['admin'],
+    });
   }
 
-  getEngineer(id: number) {
-    return this.adminRepository.findOneBy({ id });
+  async getEngineer(id: number) {
+    const engineer = await this.engineerRepository.findOneBy({ id });
+    if (!engineer) return null;
+    const { password, ...safeEngineer } = engineer;
+    return safeEngineer;
   }
 
   async createAdmin(dto: AdminDTO) {
@@ -62,8 +82,9 @@ export class AdminService {
     return this.adminRepository.update(id, mydata);
   }
 
-  searchAdmin(name: string) {
-    return this.adminRepository.find({ where: { name } });
+  async searchAdmin(name: string) {
+    const admins = await this.adminRepository.find({ where: { name } });
+    return this.sanitizeAdmins(admins);
   }
 
   async createOfficer(data: any) {

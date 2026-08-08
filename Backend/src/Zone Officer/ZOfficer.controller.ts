@@ -7,10 +7,10 @@ import { ZOfficerService } from './ZOfficer.service';
 import {
   CreateZoneOfficerDto, UpdateZoneOfficerDto,
   CreateComplaintDto, UpdateComplainDto, CreateOfficerProfileDto,
-} from './ZOfficer.dto';
+} from './DTO/ZOfficer.dto';
 import { diskStorage, MulterError } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { OtpService } from './otp.service';
+import { OtpService } from '../otp.service';
 
 @Controller('zone-officer')
 export class ZOfficerController {

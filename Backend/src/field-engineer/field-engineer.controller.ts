@@ -1,16 +1,18 @@
 import {
   Body, Controller, Get, Param, Patch, Post,
-  UseInterceptors, UsePipes, ValidationPipe,
+  UseGuards, UseInterceptors, UsePipes, ValidationPipe,
   UploadedFile, HttpException, HttpStatus, ParseIntPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from '@nestjs/passport';
 import { diskStorage, MulterError } from 'multer';
 
 import { FieldEngineerService } from './field-engineer.service';
+import { FieldEngineerAuthGuard } from './field-engineer-auth.guard';
 import {
   RegisterEngineerDto, LoginEngineerDto,
   AssignComplaintDto, AddCommentDto, UpdateAssignmentStatusDto,
-} from './field-engineer.dto';
+} from './DTO/field-engineer.dto';
 
 @Controller('field-engineer')
 export class FieldEngineerController {
@@ -29,31 +31,20 @@ export class FieldEngineerController {
     return await this.fieldEngineerService.login(dto);
   }
 
-  // ── Engineers
+  // ── All Engineers
   @Get('all')
   async getAllEngineers(): Promise<object> {
     return await this.fieldEngineerService.getAllEngineers();
   }
 
-  @Get(':id')
-  async getEngineerById(@Param('id', ParseIntPipe) id: number): Promise<object> {
-    return await this.fieldEngineerService.getEngineerById(id);
-  }
-
-  // ── Assignments
+  // ── Assign
   @Post('assign')
   @UsePipes(new ValidationPipe())
   async assignComplaint(@Body() dto: AssignComplaintDto): Promise<object> {
     return await this.fieldEngineerService.assignComplaint(dto);
   }
 
-  @Get(':engineerId/complaints')
-  async getAssignedComplaints(
-    @Param('engineerId', ParseIntPipe) engineerId: number,
-  ): Promise<object> {
-    return await this.fieldEngineerService.getAssignedComplaints(engineerId);
-  }
-
+  // ── Assignment routes (named routes আগে — wildcard এর আগে রাখা জরুরি)
   @Get('assignment/:assignmentId')
   async getAssignmentById(
     @Param('assignmentId', ParseIntPipe) assignmentId: number,
@@ -61,7 +52,6 @@ export class FieldEngineerController {
     return await this.fieldEngineerService.getAssignmentById(assignmentId);
   }
 
-  // ── Status Update (Mark In Progress / Resolved)
   @Patch('assignment/:assignmentId/status')
   @UsePipes(new ValidationPipe())
   async updateStatus(
@@ -71,7 +61,6 @@ export class FieldEngineerController {
     return await this.fieldEngineerService.updateStatus(assignmentId, dto);
   }
 
-  // ── Upload Repair Photo
   @Post('assignment/:assignmentId/photo')
   @UseInterceptors(
     FileInterceptor('image', {
@@ -103,7 +92,6 @@ export class FieldEngineerController {
     return await this.fieldEngineerService.uploadRepairPhoto(assignmentId, imageUrl, caption);
   }
 
-  // ── Get Photos
   @Get('assignment/:assignmentId/photos')
   async getPhotos(
     @Param('assignmentId', ParseIntPipe) assignmentId: number,
@@ -111,7 +99,6 @@ export class FieldEngineerController {
     return await this.fieldEngineerService.getPhotosByAssignment(assignmentId);
   }
 
-  // ── Add Comment
   @Post('assignment/:assignmentId/comment')
   @UsePipes(new ValidationPipe())
   async addComment(
@@ -121,11 +108,23 @@ export class FieldEngineerController {
     return await this.fieldEngineerService.addComment(assignmentId, dto);
   }
 
-  // ── Get Comments
   @Get('assignment/:assignmentId/comments')
   async getComments(
     @Param('assignmentId', ParseIntPipe) assignmentId: number,
   ): Promise<object> {
     return await this.fieldEngineerService.getCommentsByAssignment(assignmentId);
+  }
+
+  // ── Wildcard routes সবার শেষে
+  @Get(':engineerId/complaints')
+  async getAssignedComplaints(
+    @Param('engineerId', ParseIntPipe) engineerId: number,
+  ): Promise<object> {
+    return await this.fieldEngineerService.getAssignedComplaints(engineerId);
+  }
+
+  @Get(':id')
+  async getEngineerById(@Param('id', ParseIntPipe) id: number): Promise<object> {
+    return await this.fieldEngineerService.getEngineerById(id);
   }
 }

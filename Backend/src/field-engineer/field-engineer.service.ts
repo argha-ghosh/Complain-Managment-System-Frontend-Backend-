@@ -4,16 +4,15 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 
-import { FieldEngineerEntity } from './field-engineer.entity';
-import { EngineerAssignmentEntity } from './engineer-assignment.entity';
-import { RepairPhotoEntity } from './repair-photo.entity';
-import { EngineerCommentEntity } from './engineer-comment.entity';
+import { FieldEngineerEntity } from './Entity/field-engineer.entity';
+import { EngineerAssignmentEntity } from './Entity/engineer-assignment.entity';
+import { RepairPhotoEntity } from './Entity/repair-photo.entity';
+import { EngineerCommentEntity } from './Entity/engineer-comment.entity';
 import {
   RegisterEngineerDto, LoginEngineerDto,
   AssignComplaintDto, AddCommentDto, UpdateAssignmentStatusDto,
-} from './field-engineer.dto';
-
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
+} from './DTO/field-engineer.dto';
+import { requireEnvValue } from '../common/jwt-secret';
 
 @Injectable()
 export class FieldEngineerService {
@@ -30,6 +29,13 @@ export class FieldEngineerService {
     @InjectRepository(EngineerCommentEntity)
     private readonly commentRepository: Repository<EngineerCommentEntity>,
   ) {}
+
+  private sanitizeEngineer(
+    engineer: FieldEngineerEntity,
+  ): Partial<FieldEngineerEntity> {
+    const { password, ...safeEngineer } = engineer;
+    return safeEngineer;
+  }
 
   // ── Register
   async register(dto: RegisterEngineerDto): Promise<{ message: string }> {
@@ -73,17 +79,17 @@ export class FieldEngineerService {
 
     const token = jwt.sign(
       { id: engineer.id, email: engineer.email, role: 'field_engineer' },
-      JWT_SECRET,
+      requireEnvValue('JWT_SECRET'),
       { expiresIn: '7d' },
     );
 
-    const { password, ...safeData } = engineer;
-    return { token, engineer: safeData };
+    return { token, engineer: this.sanitizeEngineer(engineer) };
   }
 
   // ── Get All Engineers
-  async getAllEngineers(): Promise<FieldEngineerEntity[]> {
-    return await this.engineerRepository.find();
+  async getAllEngineers(): Promise<Partial<FieldEngineerEntity>[]> {
+    const engineers = await this.engineerRepository.find();
+    return engineers.map((engineer) => this.sanitizeEngineer(engineer));
   }
 
   // ── Get Engineer by ID
@@ -95,8 +101,7 @@ export class FieldEngineerService {
     if (!engineer) {
       throw new HttpException(`Engineer with ID ${id} not found`, HttpStatus.NOT_FOUND);
     }
-    const { password, ...safeData } = engineer;
-    return safeData;
+    return this.sanitizeEngineer(engineer);
   }
 
   // ── Assign Complaint to Engineer (Admin use)

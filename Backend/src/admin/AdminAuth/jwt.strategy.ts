@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { requireConfigValue } from '../../common/jwt-secret';
+
+type AdminJwtPayload = { sub?: number; id?: number; email?: string };
 
 // Named 'admin-jwt' so it does not conflict with the 'jwt' strategy in the auth module
 @Injectable()
@@ -10,11 +13,15 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.get<string>('ADMIN_JWT_SECRET', 'DhakaCityCorporationKey'),
+      secretOrKey: requireConfigValue(config, 'ADMIN_JWT_SECRET'),
     });
   }
 
-  async validate(payload: any) {
-    return { id: payload.id, email: payload.email };
+  validate(payload: AdminJwtPayload) {
+    const id = payload.sub ?? payload.id;
+    if (id == null || !payload.email) {
+      throw new UnauthorizedException();
+    }
+    return { id, email: payload.email };
   }
 }

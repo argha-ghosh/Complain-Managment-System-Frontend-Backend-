@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe }
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { LoginDto } from './login.dto';
+import { LoginDto } from './DTO/login.dto';
 
 type JwtRequestUser = { userId: number; email: string };
 

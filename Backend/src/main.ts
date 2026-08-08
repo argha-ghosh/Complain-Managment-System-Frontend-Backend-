@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import session from 'express-session';
+import { requireEnvValue } from './common/jwt-secret';
 
 // Load environment variables first
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
@@ -25,12 +26,12 @@ async function bootstrap() {
   // Session (used by admin part)
   app.use(
     session({
-      secret: process.env.SESSION_SECRET || 'my-secret',
+      secret: requireEnvValue('SESSION_SECRET'),
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
     }),
   );
 
   await app.listen(3000);
 }
-bootstrap();
+void bootstrap();

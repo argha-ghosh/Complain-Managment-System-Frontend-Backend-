@@ -3,10 +3,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { FieldEngineerController } from './field-engineer.controller';
 import { FieldEngineerService } from './field-engineer.service';
-import { FieldEngineerEntity } from './field-engineer.entity';
-import { EngineerAssignmentEntity } from './engineer-assignment.entity';
-import { RepairPhotoEntity } from './repair-photo.entity';
-import { EngineerCommentEntity } from './engineer-comment.entity';
+import { FieldEngineerEntity } from './Entity/field-engineer.entity';
+import { EngineerAssignmentEntity } from './Entity/engineer-assignment.entity';
+import { RepairPhotoEntity } from './Entity/repair-photo.entity';
+import { EngineerCommentEntity } from './Entity/engineer-comment.entity';
+import { FieldEngineerAuthGuard } from './field-engineer-auth.guard';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { EngineerCommentEntity } from './engineer-comment.entity';
     ]),
   ],
   controllers: [FieldEngineerController],
-  providers: [FieldEngineerService],
+  providers: [FieldEngineerService, FieldEngineerAuthGuard],
   exports: [FieldEngineerService],
 })
 export class FieldEngineerModule {}
